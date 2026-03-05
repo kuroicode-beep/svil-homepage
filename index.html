@@ -30,10 +30,30 @@
         .card { border: 1px solid #333; padding: 25px; background: rgba(20, 20, 20, 0.9); border-radius: 8px; transition: transform 0.3s ease, border-color 0.3s ease; }
         .card:hover { border-color: var(--accent-color); transform: translateY(-5px); }
         .card strong { color: var(--accent-color); font-size: 1.2rem; display: block; margin-bottom: 10px; }
-        
         footer { border-top: 1px solid #333; padding: 50px 0; font-size: 0.9rem; color: #888; text-align: center; background: rgba(10, 10, 10, 0.9); }
         .contact-info p { margin: 8px 0; }
-
+        .footer-menu {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: #a6a6a6;
+        }
+        .footer-menu .divider { color: #555; }
+        .footer-menu a,
+        .footer-menu button {
+            color: var(--accent-color);
+            text-decoration: none;
+            background: none;
+            border: 0;
+            padding: 0;
+            font: inherit;
+            cursor: pointer;
+        }
+        .footer-menu a:hover,
+        .footer-menu button:hover { text-decoration: underline; }
         @media (max-width: 600px) {
              .hero h1 { font-size: 2rem; }
              .grid { grid-template-columns: 1fr; }
@@ -70,12 +90,33 @@
             <h2 id="title-contact" style="color:var(--accent-color);"></h2>
             <p>Email: inblue@yourdomain.com</p>
             <p>Phone: 010-XXXX-XXXX (Office) | Fax: 050-XXXX-XXXX</p>
-            <p>Location: 경기도 남양주시 OO동 | Web: www.svil.kr</p>
-            <p style="margin-top: 30px; font-size: 0.8rem;">© 2026 Singularity Visual Intelligence Lab. All rights reserved.</p>
+            <p>Location: Gyeonggi-do Namyangju-si OO-dong | Web: www.svil.kr</p>
+            <nav class="footer-menu" aria-label="Footer menu">
+                <a href="privacy.html">&#44060;&#51064;&#51221;&#48372;&#48372;&#54840;</a>
+                <span class="divider">|</span>
+                <a href="#" id="footer-blog" rel="noopener noreferrer">&#48660;&#47196;&#44536;</a>
+                <span class="divider">|</span>
+                <a href="#" id="footer-youtube" rel="noopener noreferrer">&#50976;&#53916;&#48652;</a>
+                <span class="divider">|</span>
+                <button type="button" id="footer-install">&#54856; &#54868;&#47732;&#50640; &#52628;&#44032;</button>
+                <span class="divider">|</span>
+                <button type="button" id="footer-share">&#44277;&#50976;&#54616;&#44592;</button>
+            </nav>
+            <p style="margin-top: 30px; font-size: 0.8rem;">&copy; 2026 Singularity Visual Intelligence Lab. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
+        const externalLinks = {
+            blog: "",
+            youtube: ""
+        };
+        let deferredInstallPrompt = null;
+
+        window.addEventListener("beforeinstallprompt", (event) => {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+        });
         // --- 콘텐츠 데이터 및 렌더링 로직 ---
         const data = {
             ko: {
@@ -121,6 +162,64 @@
         function toggleLang() { curLang = curLang === 'ko' ? 'en' : 'ko'; render(); }
         render();
 
+        function openExternalLink(key) {
+            const targetUrl = externalLinks[key];
+            if (!targetUrl) {
+                alert("\uD574\uB2F9 \uB9C1\uD06C\uB294 \uC544\uC9C1 \uC900\uBE44 \uC911\uC785\uB2C8\uB2E4. URL\uC744 \uC124\uC815\uD574 \uC8FC\uC138\uC694.");
+                return;
+            }
+            window.open(targetUrl, "_blank", "noopener,noreferrer");
+        }
+
+        async function addToHomeScreen() {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                await deferredInstallPrompt.userChoice;
+                deferredInstallPrompt = null;
+                return;
+            }
+            alert("\uBE0C\uB77C\uC6B0\uC800 \uBA54\uB274\uC5D0\uC11C '\uD648 \uD654\uBA74\uC5D0 \uCD94\uAC00'\uB97C \uC120\uD0DD\uD574 \uC8FC\uC138\uC694.");
+        }
+
+        async function sharePage() {
+            const shareData = {
+                title: document.title,
+                text: "SVIL homepage",
+                url: window.location.href
+            };
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    return;
+                } catch (error) {
+                    if (error && error.name === "AbortError") return;
+                }
+            }
+            try {
+                await navigator.clipboard.writeText(shareData.url);
+                alert("\uB9C1\uD06C\uB97C \uD074\uB9BD\uBCF4\uB4DC\uC5D0 \uBCF5\uC0AC\uD588\uC2B5\uB2C8\uB2E4.");
+            } catch (error) {
+                prompt("\uC544\uB798 \uB9C1\uD06C\uB97C \uBCF5\uC0AC\uD574 \uC8FC\uC138\uC694.", shareData.url);
+            }
+        }
+
+        document.getElementById("footer-blog").addEventListener("click", (event) => {
+            event.preventDefault();
+            openExternalLink("blog");
+        });
+
+        document.getElementById("footer-youtube").addEventListener("click", (event) => {
+            event.preventDefault();
+            openExternalLink("youtube");
+        });
+
+        document.getElementById("footer-install").addEventListener("click", () => {
+            addToHomeScreen();
+        });
+
+        document.getElementById("footer-share").addEventListener("click", () => {
+            sharePage();
+        });
         // --- 배경 뇌파/신경망 애니메이션 (Canvas JS) ---
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
