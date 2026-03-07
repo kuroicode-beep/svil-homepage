@@ -17,13 +17,14 @@
 
         * { box-sizing: border-box; }
 
+        html { overflow-x: hidden; }
+
         body {
             background: var(--bg);
             color: var(--text);
             font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
             margin: 0;
             line-height: 1.7;
-            overflow-x: hidden;
             font-size: 18px;
         }
 
@@ -97,7 +98,8 @@
         }
         .lang-btn:hover {
             background: var(--accent);
-            color: var(--bg);
+            color: #000;
+            border-color: var(--accent);
         }
 
         /* ── Hero ── */
