@@ -1,258 +1,858 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVIL - Singularity Visual Intelligence Lab</title>
     <style>
-        /* 誘몃땲硫 SF ?ㅽ????쒗듃 + 諛곌꼍 ?④낵 */
-        :root { --accent-color: #00d4ff; --bg-color: #0a0a0a; --text-color: #e0e0e0; }
-        body { background: var(--bg-color); color: var(--text-color); font-family: 'Pretendard', sans-serif; margin: 0; line-height: 1.6; overflow-x: hidden; }
-        
-        /* 諛곌꼍 Canvas ?ㅽ???*/
-        #bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        
-        /* 硫붿씤 而⑦뀒?대꼫媛 諛곌꼍 ?꾩뿉 ?ㅻ룄濡??ㅼ젙 */
-        .container { position: relative; z-index: 10; max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-        
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
-        #logo-img { height: 50px; width: auto; /* 濡쒓퀬 ?ш린??留욎떠 議곗젅?섏꽭??*/ }
-        .lang-btn { background: rgba(255,255,255,0.1); border: 1px solid #444; color: var(--accent-color); cursor: pointer; padding: 8px 15px; border-radius: 4px; transition: all 0.3s ease; }
-        .lang-btn:hover { background: var(--accent-color); color: var(--bg-color); }
-        
-        .hero { padding: 80px 0 120px; text-align: center; }
-        .hero h1 { font-size: 3rem; color: var(--accent-color); letter-spacing: -2px; margin: 0; text-shadow: 0 0 20px rgba(0, 212, 255, 0.5); }
-        
-        .section { margin-bottom: 100px; background: rgba(10, 10, 10, 0.8); padding: 30px; border-radius: 12px; border: 1px solid #222; backdrop-filter: blur(5px); }
-        .section h2 { border-bottom: 2px solid #333; padding-bottom: 15px; color: var(--accent-color); margin-top: 0; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .card { border: 1px solid #333; padding: 25px; background: rgba(20, 20, 20, 0.9); border-radius: 8px; transition: transform 0.3s ease, border-color 0.3s ease; }
-        .card:hover { border-color: var(--accent-color); transform: translateY(-5px); }
-        .card strong { color: var(--accent-color); font-size: 1.2rem; display: block; margin-bottom: 10px; }
-        footer { border-top: 1px solid #333; padding: 50px 0; font-size: 0.9rem; color: #888; text-align: center; background: rgba(10, 10, 10, 0.9); position: relative; z-index: 10; }
-        .contact-info p { margin: 8px 0; }
-        .footer-menu {
-            margin-top: 20px;
+        :root {
+            --accent: #f5c518;
+            --accent-dim: rgba(245, 197, 24, 0.15);
+            --bg: #0a0a0a;
+            --bg-card: #111111;
+            --text: #e8e8e8;
+            --text-muted: #999;
+            --border: #2a2a2a;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            margin: 0;
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-size: 18px;
+        }
+
+        /* ── Background canvas ── */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── Layout ── */
+        .wrap {
+            position: relative;
+            z-index: 10;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── Nav ── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.92);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(8px);
+        }
+        .nav-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-            color: #a6a6a6;
+            height: 64px;
         }
-        .footer-menu .divider { color: #555; }
-        .footer-menu a,
-        .footer-menu button {
-            color: var(--accent-color);
+        .nav-logo {
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--accent);
             text-decoration: none;
-            background: none;
-            border: 0;
-            padding: 0;
-            font: inherit;
-            cursor: pointer;
+            letter-spacing: 0.05em;
         }
-        .footer-menu a:hover,
-        .footer-menu button:hover { text-decoration: underline; }
-        @media (max-width: 600px) {
-             .hero h1 { font-size: 2rem; }
-             .grid { grid-template-columns: 1fr; }
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--accent); }
+        .lang-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--accent);
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .lang-btn:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 120px 0 100px;
+            text-align: center;
+        }
+        .hero-label {
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent);
+            letter-spacing: -0.03em;
+            margin: 0 0 8px;
+            text-shadow: 0 0 40px rgba(245, 197, 24, 0.35);
+            line-height: 1;
+        }
+        .hero-fullname {
+            font-size: 1rem;
+            color: var(--text-muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+        .hero-tagline {
+            font-size: 1.4rem;
+            color: var(--text);
+            max-width: 580px;
+            margin: 0 auto 20px;
+            line-height: 1.5;
+        }
+        .hero-sub {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 52px;
+        }
+        .hero-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+        .btn-primary:hover {
+            background: #ffd740;
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border-color: var(--border);
+            color: var(--text);
+        }
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ── Sections ── */
+        section { padding: 80px 0; }
+        section + section { border-top: 1px solid var(--border); }
+
+        .section-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text);
+            margin: 0 0 16px;
+            line-height: 1.2;
+        }
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 640px;
+            margin-bottom: 52px;
+        }
+
+        /* ── Cards ── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+        .card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        .card-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ── Project cards ── */
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 32px;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+        .project-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: var(--accent-dim);
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-bottom: 14px;
+        }
+        .project-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        .project-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .project-points {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .project-points li {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            background: #1a1a1a;
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+        .project-link {
+            display: inline-block;
+            margin-top: 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .project-link:hover { text-decoration: underline; }
+
+        /* ── Lab Log ── */
+        .lablog-placeholder {
+            background: var(--bg-card);
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            padding: 48px 32px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ── Links section ── */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .link-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 22px 24px;
+            text-decoration: none;
+            color: var(--text);
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .link-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-3px);
+            color: var(--accent);
+        }
+        .link-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        .link-label {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .link-handle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        .link-card:hover .link-handle { color: inherit; }
+        .link-notice {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 20px;
+            padding: 12px 16px;
+            background: #1a1500;
+            border: 1px solid #3a3000;
+            border-radius: 6px;
+        }
+
+        /* ── Contact ── */
+        .contact-block {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 480px;
+        }
+        .contact-block .email-link {
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            margin-top: 8px;
+        }
+        .contact-block .email-link:hover { text-decoration: underline; }
+
+        /* ── Philosophy ── */
+        .philosophy-block {
+            border-left: 4px solid var(--accent);
+            padding: 24px 32px;
+            background: var(--accent-dim);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+        .philosophy-block p {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--text);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* ── Footer ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 10;
+        }
+        .footer-inner {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            text-align: center;
+        }
+        .footer-logo {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+        }
+        .footer-nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .footer-nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-nav a:hover { color: var(--accent); }
+        .footer-copy {
+            font-size: 0.8rem;
+            color: #555;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 640px) {
+            body { font-size: 16px; }
+            .hero h1 { font-size: 2.8rem; }
+            .hero-tagline { font-size: 1.15rem; }
+            .section-title { font-size: 1.6rem; }
+            .nav-links { display: none; }
+            .contact-block { padding: 28px 20px; }
         }
     </style>
 </head>
 <body>
     <canvas id="bg-canvas"></canvas>
 
-    <div class="container">
-        <header>
-            <img src="logo.png" alt="SVIL Logo" id="logo-img" onerror="this.style.display='none'; document.getElementById('logo-text').style.display='block';">
-            <div id="logo-text" style="display:none; font-weight:bold; font-size:24px; color:var(--accent-color);">SVIL</div>
-            <button class="lang-btn" onclick="toggleLang()">?쒓뎅??/ English</button>
-        </header>
+    <!-- ── Navigation ── -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#hero" class="nav-logo">SVIL</a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="#about" id="nav-about">About</a></li>
+                <li><a href="#research" id="nav-research">Research</a></li>
+                <li><a href="#projects" id="nav-projects">Projects</a></li>
+                <li><a href="#lablog" id="nav-lablog">Lab Log</a></li>
+                <li><a href="#links" id="nav-links-section">Links</a></li>
+            </ul>
+            <button class="lang-btn" onclick="toggleLang()">한국어 / English</button>
+        </div>
+    </nav>
 
+    <!-- ── Hero ── -->
+    <div class="wrap" id="hero">
         <section class="hero">
-            <h1 id="slogan"></h1>
-        </section>
-
-        <section class="section">
-            <h2 id="title-vision"></h2>
-            <p id="content-vision" style="white-space: pre-line;"></p>
-        </section>
-
-        <section class="section">
-            <h2 id="title-research"></h2>
-            <div class="grid" id="content-research"></div>
+            <p class="hero-label">Singularity Visual Intelligence Lab</p>
+            <h1>SVIL</h1>
+            <p class="hero-fullname">Singularity Visual Intelligence Lab</p>
+            <p class="hero-tagline" id="hero-tagline">
+                AI tools, accessibility research,<br>
+                and cognitive exploration after vision loss.
+            </p>
+            <p class="hero-sub" id="hero-sub">Building accessible AI tools and research for low vision workflows.</p>
+            <div class="hero-btns">
+                <a href="#projects" class="btn btn-primary" id="btn-projects">View Projects</a>
+                <a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener noreferrer" class="btn btn-outline" id="btn-github">GitHub</a>
+                <a href="#lablog" class="btn btn-outline" id="btn-lablog">Lab Log</a>
+            </div>
         </section>
     </div>
 
-    <footer class="contact-info">
-        <div class="container">
-            <h2 id="title-contact" style="color:var(--accent-color);"></h2>
-            <p>Email: inblue@yourdomain.com</p>
-            <p>Phone: 010-XXXX-XXXX (Office) | Fax: 050-XXXX-XXXX</p>
-            <p>Location: Gyeonggi-do Namyangju-si OO-dong | Web: www.svil.kr</p>
-            <nav class="footer-menu" aria-label="Footer menu">
-                <a href="privacy.html">&#44060;&#51064;&#51221;&#48372;&#48372;&#54840;</a>
-                <span class="divider">|</span>
-                <a href="#" id="footer-blog" rel="noopener noreferrer">&#48660;&#47196;&#44536;</a>
-                <span class="divider">|</span>
-                <a href="#" id="footer-youtube" rel="noopener noreferrer">&#50976;&#53916;&#48652;</a>
-                <span class="divider">|</span>
-                <button type="button" id="footer-install">&#54856; &#54868;&#47732;&#50640; &#52628;&#44032;</button>
-                <span class="divider">|</span>
-                <button type="button" id="footer-share">&#44277;&#50976;&#54616;&#44592;</button>
+    <!-- ── About ── -->
+    <div class="wrap" id="about">
+        <section>
+            <p class="section-label">About</p>
+            <h2 class="section-title" id="about-title">About SVIL</h2>
+            <p class="section-desc" id="about-desc">
+                SVIL is an independent lab exploring AI tools,
+                accessibility, and cognition after vision loss.
+            </p>
+            <div class="philosophy-block">
+                <p id="philosophy-text">Accessibility first.<br>We build tools that remain usable when vision changes.</p>
+            </div>
+            <p id="about-extra" style="color: var(--text-muted); font-size: 1rem; max-width: 640px;">
+                We do not aim for perfection. We aim to leave something behind.
+            </p>
+        </section>
+    </div>
+
+    <!-- ── Research ── -->
+    <div class="wrap" id="research">
+        <section>
+            <p class="section-label">Research</p>
+            <h2 class="section-title" id="research-title">Research Areas</h2>
+            <p class="section-desc" id="research-desc">Four core research domains at SVIL.</p>
+            <div class="grid" id="research-grid"></div>
+        </section>
+    </div>
+
+    <!-- ── Projects ── -->
+    <div class="wrap" id="projects">
+        <section>
+            <p class="section-label">Projects</p>
+            <h2 class="section-title" id="projects-title">Major Projects</h2>
+            <p class="section-desc" id="projects-desc">Tools and experiments built at SVIL.</p>
+            <div class="grid" id="projects-grid"></div>
+        </section>
+    </div>
+
+    <!-- ── Lab Log ── -->
+    <div class="wrap" id="lablog">
+        <section>
+            <p class="section-label">Lab Log</p>
+            <h2 class="section-title" id="lablog-title">Lab Log</h2>
+            <p class="section-desc" id="lablog-desc">Development notes, experiments, writing, and content from SVIL.</p>
+            <div class="lablog-placeholder" id="lablog-placeholder">
+                개발 로그, AI 실험, 접근성 연구 기록, 문화 콘텐츠는 준비 중입니다.<br>
+                <span style="font-size:0.85rem;">Blog and YouTube updates coming soon.</span>
+            </div>
+        </section>
+    </div>
+
+    <!-- ── External Links ── -->
+    <div class="wrap" id="links">
+        <section>
+            <p class="section-label">Links</p>
+            <h2 class="section-title" id="links-title">External Links</h2>
+            <p class="section-desc" id="links-desc">Channels and contact points for SVIL.</p>
+            <div class="links-grid">
+                <a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener noreferrer" class="link-card" id="link-github">
+                    <span class="link-icon">&#128025;</span>
+                    <div>
+                        <div class="link-label">GitHub</div>
+                        <div class="link-handle">kuroicode-beep</div>
+                    </div>
+                </a>
+                <a href="https://inbluelog.blogspot.com/" target="_blank" rel="noopener noreferrer" class="link-card" id="link-blog">
+                    <span class="link-icon">&#128221;</span>
+                    <div>
+                        <div class="link-label">Blog</div>
+                        <div class="link-handle">inbluelog.blogspot.com</div>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/@%EC%8B%A4%EC%9A%A9%EC%BD%94%EB%94%A9" target="_blank" rel="noopener noreferrer" class="link-card" id="link-youtube">
+                    <span class="link-icon">&#127916;</span>
+                    <div>
+                        <div class="link-label">YouTube</div>
+                        <div class="link-handle">@실용코딩</div>
+                    </div>
+                </a>
+                <a href="mailto:kuroicode@gmail.com" class="link-card">
+                    <span class="link-icon">&#9993;</span>
+                    <div>
+                        <div class="link-label">Email</div>
+                        <div class="link-handle">kuroicode@gmail.com</div>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ── Contact ── -->
+    <div class="wrap" id="contact">
+        <section>
+            <p class="section-label">Contact</p>
+            <h2 class="section-title" id="contact-title">Contact</h2>
+            <div class="contact-block">
+                <p id="contact-desc" style="color: var(--text-muted); margin: 0 0 12px; font-size: 1rem;">
+                    이메일로 연락해 주세요.
+                </p>
+                <a href="mailto:kuroicode@gmail.com" class="email-link">kuroicode@gmail.com</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ── Footer ── -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-logo">SVIL</div>
+            <nav class="footer-nav" aria-label="Footer navigation">
+                <a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://inbluelog.blogspot.com/" target="_blank" rel="noopener noreferrer">Blog</a>
+                <a href="https://www.youtube.com/@%EC%8B%A4%EC%9A%A9%EC%BD%94%EB%94%A9" target="_blank" rel="noopener noreferrer">YouTube</a>
+                <a href="mailto:kuroicode@gmail.com">Contact</a>
             </nav>
-            <p style="margin-top: 30px; font-size: 0.8rem;">&copy; 2026 Singularity Visual Intelligence Lab. All rights reserved.</p>
+            <p class="footer-copy">&copy; 2026 Singularity Visual Intelligence Lab. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        const externalLinks = {
-            blog: "",
-            youtube: ""
-        };
-        let deferredInstallPrompt = null;
-
-        window.addEventListener("beforeinstallprompt", (event) => {
-            event.preventDefault();
-            deferredInstallPrompt = event;
-        });
-        // --- 肄섑뀗痢??곗씠??諛??뚮뜑留?濡쒖쭅 ---
+        /* ── Localisation data ── */
         const data = {
-                        ko: {
-                slogan: "무한 확장, 기회의 기술. SVIL",
-                vision_title: "연구 및 설립 목적",
-                vision_content: "SVIL은 AI 전환 시대에 시각장애인의 정보 접근성을 높이는 기술을 연구하고 개발합니다.\n\n시각장애인과 비장애인이 동등한 기회를 가질 수 있는 환경을 구축하는 것이 우리의 목표입니다. 생성형 AI 기반 콘텐츠 제작 참여 기술과 교육 커리큘럼을 통해 사회 참여와 삶의 질 향상에 기여합니다.",
-                research_title: "주요 연구 과제 (Phase 1)",
+            ko: {
+                "hero-tagline": "저시력자를 위한<br>AI 도구 · 접근성 연구 · 인지 실험실",
+                "hero-sub": "저시력 워크플로우를 위한 AI 도구와 연구를 만듭니다.",
+                "btn-projects": "프로젝트 보기",
+                "btn-github": "GitHub",
+                "btn-lablog": "랩 로그",
+                "nav-about": "소개",
+                "nav-research": "연구",
+                "nav-projects": "프로젝트",
+                "nav-lablog": "랩 로그",
+                "nav-links-section": "링크",
+                "about-title": "SVIL 소개",
+                "about-desc": "SVIL은 저시력 환경 이후의 인지 변화와 작업 방식을 연구하며, AI 도구와 접근성 중심 인터페이스를 개발하는 독립 실험실입니다.",
+                "philosophy-text": "접근성이 먼저입니다.<br>시력이 변해도 사용할 수 있는 도구를 만듭니다.",
+                "about-extra": "완벽함을 목표로 하지 않습니다. 무언가를 남기는 것을 목표로 합니다.",
+                "research-title": "연구 영역",
+                "research-desc": "SVIL의 네 가지 핵심 연구 분야입니다.",
+                "projects-title": "주요 프로젝트",
+                "projects-desc": "SVIL에서 개발 중인 도구와 실험들입니다.",
+                "lablog-title": "랩 로그",
+                "lablog-desc": "SVIL의 개발 노트, 실험 기록, 집필, 콘텐츠입니다.",
+                "lablog-placeholder": "개발 로그, AI 실험, 접근성 연구 기록, 문화 콘텐츠는 준비 중입니다.<br><span style='font-size:0.85rem;'>블로그 및 유튜브 업데이트 예정.</span>",
+                "links-title": "외부 링크",
+                "links-desc": "SVIL의 외부 채널과 연락 창구입니다.",
+                "link-notice": "",
+                "contact-title": "연락처",
+                "contact-desc": "이메일로 연락해 주세요.",
                 research: [
-                    { t: "기초 연구 (Pure Research)", d: "비시각 정보의 인지/표현 메커니즘 연구" },
-                    { t: "기술 개발 (Tech Dev)", d: "차세대 음성 인터페이스 및 정보 내비게이션 개발" },
-                    { t: "교육 커리큘럼 (Education)", d: "생성형 AI 활용 음악 및 콘텐츠 창작 프로그램" },
-                    { t: "사이드 프로젝트 (Side Project)", d: "AI 기반 보행 보조 및 환경 인지 웨어러블 연구" }
+                    {
+                        icon: "🧠",
+                        title: "뇌가소성 · 인지능력 연구",
+                        desc: "시력 저하 이후 인지 처리 방식의 변화를 연구합니다. 뇌가소성, 인지 전략 변화, AI 활용과 인지 확장의 관련성을 자기 관찰 기반으로 탐구합니다."
+                    },
+                    {
+                        icon: "📚",
+                        title: "저시력자 AI 교육 커리큘럼",
+                        desc: "저시력자를 위한 AI 활용 교육 커리큘럼을 개발합니다. 생산성 · 접근성 · 로컬 AI 중심 구성으로 강의, 출판, 교육 자료 확장을 목표로 합니다."
+                    },
+                    {
+                        icon: "🎬",
+                        title: "문화 콘텐츠 제작 · 집필",
+                        desc: "저시력 관점에서 영상, 글, 창작 기반 콘텐츠를 제작합니다. 기술과 저시력 경험을 연결하는 문화 작업을 지속합니다."
+                    },
+                    {
+                        icon: "🔍",
+                        title: "접근성 인터페이스 연구",
+                        desc: "고대비 UI, 큰 텍스트, 사용 피로 감소를 중심으로 저시력 친화 인터페이스 원칙을 연구하고 실제 프로젝트에 적용합니다."
+                    }
                 ],
-                contact_title: "연락처"
+                projects: [
+                    {
+                        tag: "로컬 AI",
+                        name: "SVIL AI Workstation",
+                        desc: "저시력 친화 로컬 AI 작업 환경 실험 프로젝트. 이미지 · 영상 · 문서 · AI 협업 흐름을 통합한 개인 워크스테이션입니다.",
+                        points: ["로컬 AI 작업 환경", "고대비 인터페이스", "저시력 친화 UI", "생성형 AI 통합"]
+                    },
+                    {
+                        tag: "텍스트 아카이브",
+                        name: "TXTBrain",
+                        desc: "파일을 폴더에 넣으면 AI가 자동으로 정리해주는 로컬 텍스트 아카이브 · 외부 두뇌 도구입니다.",
+                        points: ["txt / md / docx / pdf", "로컬 LLM 태그·요약", "검색 · 리스트 · 상세조회", "저시력 친화 UI"],
+                        link: "https://github.com/kuroicode-beep/TXTBrain"
+                    },
+                    {
+                        tag: "가사 프롬프터",
+                        name: "SingPrompt",
+                        desc: "MR과 함께 가사를 크게 보여주는 저시력 친화 가사 프롬프터입니다.",
+                        points: ["가사 txt 업로드", "mp3 업로드", "전체화면 큰 글씨", "고대비 UI", "스크롤"]
+                    }
+                ]
             },
             en: {
-                slogan: "Infinite Expansion, Tech of Opportunity. SVIL",
-                vision_title: "Our Mission",
-                vision_content: "SVIL researches and develops AI-driven information accessibility technologies for the visually impaired in this critical era of transition.\n\nOur primary goal is to build an environment where the visually impaired and non-impaired have equal opportunities. We aim to contribute to the global welfare of the visually impaired through AI-assisted content production technologies and a new paradigm of IT education curricula.",
-                research_title: "Key Research Projects (Phase 1)",
+                "hero-tagline": "AI tools, accessibility research,<br>and cognitive exploration after vision loss.",
+                "hero-sub": "Building accessible AI tools and research for low vision workflows.",
+                "btn-projects": "View Projects",
+                "btn-github": "GitHub",
+                "btn-lablog": "Lab Log",
+                "nav-about": "About",
+                "nav-research": "Research",
+                "nav-projects": "Projects",
+                "nav-lablog": "Lab Log",
+                "nav-links-section": "Links",
+                "about-title": "About SVIL",
+                "about-desc": "SVIL is an independent lab exploring AI tools, accessibility, and cognition after vision loss.",
+                "philosophy-text": "Accessibility first.<br>We build tools that remain usable when vision changes.",
+                "about-extra": "We do not aim for perfection. We aim to leave something behind.",
+                "research-title": "Research Areas",
+                "research-desc": "Four core research domains at SVIL.",
+                "projects-title": "Major Projects",
+                "projects-desc": "Tools and experiments built at SVIL.",
+                "lablog-title": "Lab Log",
+                "lablog-desc": "Development notes, experiments, writing, and content from SVIL.",
+                "lablog-placeholder": "Development logs, AI experiments, accessibility research, and cultural content — coming soon.<br><span style='font-size:0.85rem;'>Blog and YouTube updates coming soon.</span>",
+                "links-title": "External Links",
+                "links-desc": "Channels and contact points for SVIL.",
+                "link-notice": "",
+                "contact-title": "Contact",
+                "contact-desc": "Reach out via email.",
                 research: [
-                    { t: "Pure Research", d: "Mechanisms of visual rendering for non-visual information based on brain plasticity" },
-                    { t: "Tech Dev", d: "Development of 'Voice Odyssey', a next-gen voice interface and information navigation system" },
-                    { t: "Education Curriculum", d: "Generative AI-based music composition and content creation programs from a visually impaired perspective" },
-                    { t: "Side Project", d: "AI-powered wearable systems for real-time walking assistance and environmental awareness" }
+                    {
+                        icon: "🧠",
+                        title: "Neuroplasticity & Cognitive Adaptation",
+                        desc: "Researching changes in cognitive processing after vision loss. Exploring neuroplasticity, cognitive strategy shifts, and the relationship between AI use and cognitive extension through self-observation."
+                    },
+                    {
+                        icon: "📚",
+                        title: "AI Education for Low Vision Users",
+                        desc: "Developing AI education curricula for low vision users. Focused on productivity, accessibility, and local AI — with potential expansion into lectures, publications, and educational materials."
+                    },
+                    {
+                        icon: "🎬",
+                        title: "Cultural Content & Writing",
+                        desc: "Creating video, written, and creative content from a low vision perspective. Ongoing cultural work connecting technology with the lived experience of vision loss."
+                    },
+                    {
+                        icon: "🔍",
+                        title: "Accessibility-First Interface Research",
+                        desc: "Researching low vision-friendly interface principles: high contrast, large text, reduced visual fatigue. Applied directly to SVIL's own tools and projects."
+                    }
                 ],
-                contact_title: "Contact Us"
+                projects: [
+                    {
+                        tag: "Local AI",
+                        name: "SVIL AI Workstation",
+                        desc: "A local AI workstation designed for accessible creative workflows. Integrates image, video, document, and AI collaboration into a single low vision-friendly environment.",
+                        points: ["Local AI environment", "High contrast UI", "Low vision-first design", "Generative AI integration"]
+                    },
+                    {
+                        tag: "Text Archive",
+                        name: "TXTBrain",
+                        desc: "An AI-powered text archive for organizing thoughts and documents. Drop files in a folder — the AI handles tagging, summarizing, and retrieval.",
+                        points: ["txt / md / docx / pdf", "Local LLM tagging", "Search · List · Detail", "Low vision UI"],
+                        link: "https://github.com/kuroicode-beep/TXTBrain"
+                    },
+                    {
+                        tag: "Lyric Prompter",
+                        name: "SingPrompt",
+                        desc: "An accessible lyric prompter with backing tracks. Large text, high contrast, and full-screen display designed for low vision singing practice.",
+                        points: ["Lyrics txt upload", "mp3 upload", "Fullscreen large text", "High contrast", "Scrollable"]
+                    }
+                ]
             }
         };
 
         let curLang = 'ko';
-        function render() {
-            const lang = data[curLang];
-            document.getElementById('slogan').innerText = lang.slogan;
-            document.getElementById('title-vision').innerText = lang.vision_title;
-            document.getElementById('content-vision').innerText = lang.vision_content;
-            document.getElementById('title-research').innerText = lang.research_title;
-            document.getElementById('title-contact').innerText = lang.contact_title;
-            
-            const grid = document.getElementById('content-research');
-            grid.innerHTML = lang.research.map(r => `<div class="card"><strong>${r.t}</strong><br>${r.d}</div>`).join('');
+
+        function renderText() {
+            const d = data[curLang];
+            // Simple text fields
+            const textIds = [
+                "hero-tagline","hero-sub","btn-projects","btn-github","btn-lablog",
+                "nav-about","nav-research","nav-projects","nav-links-section",
+                "about-title","about-desc","philosophy-text","about-extra",
+                "research-title","research-desc","projects-title","projects-desc",
+                "lablog-title","lablog-desc","lablog-placeholder",
+                "links-title","links-desc","link-notice",
+                "contact-title","contact-desc"
+            ];
+            textIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && d[id] !== undefined) el.innerHTML = d[id];
+            });
         }
-        function toggleLang() { curLang = curLang === 'ko' ? 'en' : 'ko'; render(); }
+
+        function renderResearch() {
+            const grid = document.getElementById('research-grid');
+            grid.innerHTML = data[curLang].research.map(r => `
+                <div class="card">
+                    <div class="card-icon">${r.icon}</div>
+                    <div class="card-title">${r.title}</div>
+                    <div class="card-desc">${r.desc}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = data[curLang].projects.map(p => `
+                <div class="project-card">
+                    <span class="project-tag">${p.tag}</span>
+                    <div class="project-name">${p.name}</div>
+                    <div class="project-desc">${p.desc}</div>
+                    <ul class="project-points">
+                        ${p.points.map(pt => `<li>${pt}</li>`).join('')}
+                    </ul>
+                    ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer" class="project-link">GitHub ↗</a>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function render() {
+            renderText();
+            renderResearch();
+            renderProjects();
+        }
+
+        function toggleLang() {
+            curLang = curLang === 'ko' ? 'en' : 'ko';
+            render();
+        }
+
+        function linkNotReady(event, name) {
+            event.preventDefault();
+            alert(name + ' 링크는 현재 설정 중입니다. URL 확인 후 업데이트됩니다.');
+        }
+
         render();
 
-        function openExternalLink(key) {
-            const targetUrl = externalLinks[key];
-            if (!targetUrl) {
-                alert("\uD574\uB2F9 \uB9C1\uD06C\uB294 \uC544\uC9C1 \uC900\uBE44 \uC911\uC785\uB2C8\uB2E4. URL\uC744 \uC124\uC815\uD574 \uC8FC\uC138\uC694.");
-                return;
-            }
-            window.open(targetUrl, "_blank", "noopener,noreferrer");
-        }
-
-        async function addToHomeScreen() {
-            if (deferredInstallPrompt) {
-                deferredInstallPrompt.prompt();
-                await deferredInstallPrompt.userChoice;
-                deferredInstallPrompt = null;
-                return;
-            }
-            alert("\uBE0C\uB77C\uC6B0\uC800 \uBA54\uB274\uC5D0\uC11C '\uD648 \uD654\uBA74\uC5D0 \uCD94\uAC00'\uB97C \uC120\uD0DD\uD574 \uC8FC\uC138\uC694.");
-        }
-
-        async function sharePage() {
-            const shareData = {
-                title: document.title,
-                text: "SVIL homepage",
-                url: window.location.href
-            };
-            if (navigator.share) {
-                try {
-                    await navigator.share(shareData);
-                    return;
-                } catch (error) {
-                    if (error && error.name === "AbortError") return;
+        /* ── Smooth scroll for anchor links ── */
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
-            }
-            try {
-                await navigator.clipboard.writeText(shareData.url);
-                alert("\uB9C1\uD06C\uB97C \uD074\uB9BD\uBCF4\uB4DC\uC5D0 \uBCF5\uC0AC\uD588\uC2B5\uB2C8\uB2E4.");
-            } catch (error) {
-                prompt("\uC544\uB798 \uB9C1\uD06C\uB97C \uBCF5\uC0AC\uD574 \uC8FC\uC138\uC694.", shareData.url);
-            }
-        }
-
-        document.getElementById("footer-blog").addEventListener("click", (event) => {
-            event.preventDefault();
-            openExternalLink("blog");
+            });
         });
 
-        document.getElementById("footer-youtube").addEventListener("click", (event) => {
-            event.preventDefault();
-            openExternalLink("youtube");
-        });
-
-        document.getElementById("footer-install").addEventListener("click", () => {
-            addToHomeScreen();
-        });
-
-        document.getElementById("footer-share").addEventListener("click", () => {
-            sharePage();
-        });
-        // --- 諛곌꼍 ?뚰뙆/?좉꼍留??좊땲硫붿씠??(Canvas JS) ---
+        /* ── Particle background ── */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-        const particleCount = 50; // ?낆옄 媛쒖닔 議곗젅
-        const connectionDistance = 150; // ?곌껐??嫄곕━ 議곗젅
 
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
         class Particle {
-            constructor() {
+            constructor() { this.reset(); }
+            reset() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5; // ?띾룄 議곗젅
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.size = Math.random() * 1.5 + 0.5;
             }
             update() {
-                this.x += this.vx; this.y += this.vy;
+                this.x += this.vx;
+                this.y += this.vy;
                 if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
                 if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
             }
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = '#00d4ff'; // ?낆옄 ?됱긽
+                ctx.fillStyle = 'rgba(245, 197, 24, 0.6)';
                 ctx.fill();
             }
         }
 
-        function initParticles() { for (let i = 0; i < particleCount; i++) particles.push(new Particle()); }
+        for (let i = 0; i < 45; i++) particles.push(new Particle());
+
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particles.length; i++) {
@@ -262,9 +862,9 @@
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < connectionDistance) {
+                    if (dist < 140) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(0, 212, 255, ${1 - dist / connectionDistance})`; // ?곌껐???됱긽 諛??щ챸??
+                        ctx.strokeStyle = `rgba(245, 197, 24, ${(1 - dist / 140) * 0.25})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -274,7 +874,6 @@
             }
             requestAnimationFrame(animate);
         }
-        initParticles();
         animate();
     </script>
 </body>
