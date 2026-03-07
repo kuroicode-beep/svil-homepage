@@ -17,8 +17,6 @@
 
         * { box-sizing: border-box; }
 
-        html { overflow-x: hidden; }
-
         body {
             background: var(--bg);
             color: var(--text);
@@ -822,6 +820,8 @@
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
+        const particleCount = 50;
+        const connectionDistance = 150;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -831,13 +831,12 @@
         resizeCanvas();
 
         class Particle {
-            constructor() { this.reset(); }
-            reset() {
+            constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.4;
-                this.vy = (Math.random() - 0.5) * 0.4;
-                this.size = Math.random() * 1.5 + 0.5;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
             }
             update() {
                 this.x += this.vx;
@@ -848,12 +847,14 @@
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = 'rgba(245, 197, 24, 0.6)';
+                ctx.fillStyle = '#f5c518';
                 ctx.fill();
             }
         }
 
-        for (let i = 0; i < 45; i++) particles.push(new Particle());
+        function initParticles() {
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
+        }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -864,9 +865,9 @@
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 140) {
+                    if (dist < connectionDistance) {
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(245, 197, 24, ${(1 - dist / 140) * 0.25})`;
+                        ctx.strokeStyle = `rgba(245, 197, 24, ${1 - dist / connectionDistance})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);
@@ -876,6 +877,8 @@
             }
             requestAnimationFrame(animate);
         }
+
+        initParticles();
         animate();
     </script>
 </body>
