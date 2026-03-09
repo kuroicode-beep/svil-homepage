@@ -102,49 +102,60 @@
 
         /* ── Hero ── */
         .hero {
-            padding: 120px 0 100px;
+            padding: 48px 24px 80px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        .hero-label {
-            font-size: 0.9rem;
-            letter-spacing: 0.2em;
-            color: var(--accent);
-            text-transform: uppercase;
-            margin-bottom: 16px;
+        .hero-logo img {
+            width: 96px;
+            height: 96px;
+            margin-bottom: 20px;
         }
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--accent);
-            letter-spacing: -0.03em;
-            margin: 0 0 8px;
-            text-shadow: 0 0 40px rgba(245, 197, 24, 0.35);
-            line-height: 1;
+        .hero-brand-name {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: #ffffff;
         }
-        .hero-fullname {
-            font-size: 1rem;
-            color: var(--text-muted);
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            margin-bottom: 40px;
+        .hero-brand-full {
+            margin-top: 6px;
+            font-size: 16px;
+            color: #ffd400;
         }
-        .hero-tagline {
-            font-size: 1.4rem;
-            color: var(--text);
-            max-width: 580px;
-            margin: 0 auto 20px;
-            line-height: 1.5;
+        .hero-message {
+            margin-top: 36px;
+            max-width: 980px;
         }
-        .hero-sub {
-            font-size: 1rem;
-            color: var(--text-muted);
-            margin-bottom: 52px;
+        .hero-line {
+            margin: 0;
+            line-height: 1.6;
+        }
+        .hero-line-1 {
+            font-size: clamp(28px, 4vw, 52px);
+            font-weight: 800;
+            color: #ffd400;
+            margin-bottom: 24px;
+        }
+        .hero-line-2 {
+            font-size: clamp(24px, 3.4vw, 44px);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 24px;
+        }
+        .hero-line-3 {
+            font-size: clamp(18px, 2vw, 28px);
+            font-weight: 500;
+            color: #ffffff;
+            opacity: 0.92;
         }
         .hero-btns {
             display: flex;
             gap: 16px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-top: 40px;
         }
         .btn {
             display: inline-block;
@@ -429,10 +440,14 @@
         }
 
         /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .hero { padding: 36px 18px 60px; }
+            .hero-logo img { width: 72px; height: 72px; }
+            .hero-brand-name { font-size: 22px; }
+            .hero-brand-full { font-size: 14px; }
+        }
         @media (max-width: 640px) {
             body { font-size: 16px; }
-            .hero h1 { font-size: 2.8rem; }
-            .hero-tagline { font-size: 1.15rem; }
             .section-title { font-size: 1.6rem; }
             .nav-links { display: none; }
             .contact-block { padding: 28px 20px; }
@@ -460,14 +475,18 @@
     <!-- ── Hero ── -->
     <div class="wrap" id="hero">
         <section class="hero">
-            <p class="hero-label">Singularity Visual Intelligence Lab</p>
-            <h1>SVIL</h1>
-            <p class="hero-fullname">Singularity Visual Intelligence Lab</p>
-            <p class="hero-tagline" id="hero-tagline">
-                AI tools, accessibility research,<br>
-                and cognitive exploration after vision loss.
-            </p>
-            <p class="hero-sub" id="hero-sub">Building accessible AI tools and research for low vision workflows.</p>
+            <div class="hero-logo">
+                <img src="./assets/svil-logo.svg" alt="SVIL logo" width="96" height="96" />
+            </div>
+            <div class="hero-brand">
+                <div class="hero-brand-name" id="hero-brand-name">SVIL</div>
+                <div class="hero-brand-full" id="hero-brand-full">Singularity Visual Intelligence Lab</div>
+            </div>
+            <div class="hero-message">
+                <p class="hero-line hero-line-1" id="hero-line-1">접근성은 평등한 기회를 만듭니다.</p>
+                <p class="hero-line hero-line-2" id="hero-line-2">접근 가능한 도구만 있다면<br>저시력 시각장애인도 무엇이든 만들 수 있습니다.</p>
+                <p class="hero-line hero-line-3" id="hero-line-3">SVIL은 이런 도구를 연구하고 개발합니다.</p>
+            </div>
             <div class="hero-btns">
                 <a href="#projects" class="btn btn-primary" id="btn-projects">View Projects</a>
                 <a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener noreferrer" class="btn btn-outline" id="btn-github">GitHub</a>
@@ -599,8 +618,11 @@
         /* ── Localisation data ── */
         const data = {
             ko: {
-                "hero-tagline": "저시력자를 위한<br>AI 도구 · 접근성 연구 · 인지 실험실",
-                "hero-sub": "저시력 워크플로우를 위한 AI 도구와 연구를 만듭니다.",
+                "hero-brand-name": "SVIL",
+                "hero-brand-full": "Singularity Visual Intelligence Lab",
+                "hero-line-1": "접근성은 평등한 기회를 만듭니다.",
+                "hero-line-2": "접근 가능한 도구만 있다면<br>저시력 시각장애인도 무엇이든 만들 수 있습니다.",
+                "hero-line-3": "SVIL은 이런 도구를 연구하고 개발합니다.",
                 "btn-projects": "프로젝트 보기",
                 "btn-github": "GitHub",
                 "btn-lablog": "랩 로그",
@@ -671,8 +693,11 @@
                 ]
             },
             en: {
-                "hero-tagline": "AI tools, accessibility research,<br>and cognitive exploration after vision loss.",
-                "hero-sub": "Building accessible AI tools and research for low vision workflows.",
+                "hero-brand-name": "SVIL",
+                "hero-brand-full": "Singularity Visual Intelligence Lab",
+                "hero-line-1": "Accessibility creates equal opportunity.",
+                "hero-line-2": "With accessible tools,<br>people with low vision or blindness can build anything.",
+                "hero-line-3": "SVIL researches and develops such tools.",
                 "btn-projects": "View Projects",
                 "btn-github": "GitHub",
                 "btn-lablog": "Lab Log",
@@ -750,8 +775,9 @@
             const d = data[curLang];
             // Simple text fields
             const textIds = [
-                "hero-tagline","hero-sub","btn-projects","btn-github","btn-lablog",
-                "nav-about","nav-research","nav-projects","nav-links-section",
+                "hero-brand-name","hero-brand-full","hero-line-1","hero-line-2","hero-line-3",
+                "btn-projects","btn-github","btn-lablog",
+                "nav-about","nav-research","nav-projects","nav-lablog","nav-links-section",
                 "about-title","about-desc","philosophy-text","about-extra",
                 "research-title","research-desc","projects-title","projects-desc",
                 "lablog-title","lablog-desc","lablog-placeholder",
