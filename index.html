@@ -487,8 +487,9 @@
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 24px;
             align-items: start;
+            max-width: 680px;
         }
-        .form-card, .support-card-wrap {
+        .form-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 16px;
@@ -519,13 +520,6 @@
         .collab-line { margin-top: 18px; font-size: 0.95rem; color: var(--text-sub); }
         .collab-line a { color: var(--accent); }
         .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-
-        .support-card { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
-        .qr-frame { background: #fff; border-radius: 12px; padding: 14px; flex: none; line-height: 0; }
-        .qr-frame img { display: block; width: 216px; height: 216px; }
-        .qr-meta { display: flex; flex-direction: column; gap: 6px; min-width: 200px; flex: 1; }
-        .qr-meta b { font-weight: 700; font-size: 1.2rem; color: var(--accent-strong); }
-        .qr-meta span { color: var(--text-sub); font-size: 0.95rem; }
 
         /* ── Footer (svil-copyright 정본) ── */
         footer {
@@ -559,8 +553,6 @@
         @media (max-width: 480px) {
             .btn { width: 100%; }
             .hero-btns { width: 100%; }
-            .support-card { justify-content: center; text-align: center; }
-            .qr-meta { align-items: center; }
         }
     </style>
 </head>
@@ -929,21 +921,6 @@
                         </p>
                     </form>
 
-                    <div class="support-card-wrap" id="support">
-                        <h3 class="sub-heading" data-i18n="support_title">후원</h3>
-                        <p style="color:var(--text-sub);font-size:0.97rem;margin:0 0 18px;" data-i18n="support_sub">
-                            SVIL의 도구가 도움이 되셨다면 작은 후원으로 응원해 주세요. 전적으로 선택이고, 후원과 무관하게 도구는 계속 무료예요.
-                        </p>
-                        <div class="support-card">
-                            <div class="qr-frame">
-                                <img src="./assets/toss-qr.png" alt="토스 후원 QR — Toss donation QR" width="216" height="216" loading="lazy">
-                            </div>
-                            <div class="qr-meta">
-                                <b data-i18n="support_toss_label">토스로 후원</b>
-                                <span data-i18n="support_toss_hint">토스 앱으로 QR을 스캔하면 바로 후원할 수 있어요.</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
         </div>
@@ -1042,10 +1019,6 @@
                 f_empty: "내용을 입력해 주세요.",
                 f_mailto_hint: "문의 폼 연결을 준비 중이에요. 메일 앱이 열리면 그대로 보내 주세요.",
                 collab_line: "협업 문의",
-                support_title: "후원",
-                support_sub: "SVIL의 도구가 도움이 되셨다면 작은 후원으로 응원해 주세요. 전적으로 선택이고, 후원과 무관하게 도구는 계속 무료예요.",
-                support_toss_label: "토스로 후원",
-                support_toss_hint: "토스 앱으로 QR을 스캔하면 바로 후원할 수 있어요.",
                 svil_mission: "Singularity Visual Intelligence Lab: 저시력 시각장애인의 AI 접근성을 높이기 위한 연구와 개발을 합니다.",
                 foot_contact: "협업 문의", foot_blog: "블로그", foot_home: "홈페이지", foot_youtube: "유튜브",
                 foot_privacy_k: "개인정보", foot_privacy: "개인정보처리방침"
@@ -1118,10 +1091,6 @@
                 f_empty: "Please enter a message.",
                 f_mailto_hint: "The contact form backend is being prepared. Your mail app will open — just hit send.",
                 collab_line: "Collaboration",
-                support_title: "Support",
-                support_sub: "If SVIL's tools helped you, you can leave a small tip. Entirely optional — the tools stay free either way.",
-                support_toss_label: "Tip via Toss",
-                support_toss_hint: "Scan the QR with the Toss app (Korea) to send a tip.",
                 svil_mission: "Singularity Visual Intelligence Lab: research and development to improve AI accessibility for people with low vision.",
                 foot_contact: "Contact", foot_blog: "Blog", foot_home: "Homepage", foot_youtube: "YouTube",
                 foot_privacy_k: "Privacy", foot_privacy: "Privacy Policy"
@@ -1194,10 +1163,6 @@
                 f_empty: "内容を入力してください。",
                 f_mailto_hint: "フォーム連携は準備中です。メールアプリが開いたらそのまま送信してください。",
                 collab_line: "コラボのご相談",
-                support_title: "支援",
-                support_sub: "SVILのツールが役に立ったら、少額のチップで応援できます。もちろん任意で、支援に関係なくツールは無料のままです。",
-                support_toss_label: "Toss で支援",
-                support_toss_hint: "Toss アプリ（韓国）で QR をスキャンして支援できます。",
                 svil_mission: "Singularity Visual Intelligence Lab: ロービジョンの方のAIアクセシビリティを高めるための研究と開発をしています。",
                 foot_contact: "お問い合わせ", foot_blog: "ブログ", foot_home: "ホームページ", foot_youtube: "YouTube",
                 foot_privacy_k: "プライバシー", foot_privacy: "プライバシーポリシー"
@@ -1270,10 +1235,6 @@
                 f_empty: "请输入内容。",
                 f_mailto_hint: "表单后端正在筹备中。邮件应用打开后直接发送即可。",
                 collab_line: "合作咨询",
-                support_title: "赞助",
-                support_sub: "如果 SVIL 的工具帮到了你，可以留个小费支持一下。完全自愿，无论是否赞助，工具都会一直免费。",
-                support_toss_label: "用 Toss 赞助",
-                support_toss_hint: "用 Toss 应用（韩国）扫描二维码即可赞助。",
                 svil_mission: "Singularity Visual Intelligence Lab：致力于提升低视力人群 AI 无障碍体验的研究与开发。",
                 foot_contact: "合作咨询", foot_blog: "博客", foot_home: "主页", foot_youtube: "YouTube",
                 foot_privacy_k: "隐私", foot_privacy: "隐私政策"
@@ -1346,10 +1307,6 @@
                 f_empty: "Vui lòng nhập nội dung.",
                 f_mailto_hint: "Backend biểu mẫu đang được chuẩn bị. Ứng dụng mail sẽ mở — chỉ cần bấm gửi.",
                 collab_line: "Liên hệ hợp tác",
-                support_title: "Ủng hộ",
-                support_sub: "Nếu công cụ của SVIL giúp ích cho bạn, bạn có thể gửi một khoản tip nhỏ. Hoàn toàn tùy ý — công cụ vẫn miễn phí dù bạn có ủng hộ hay không.",
-                support_toss_label: "Ủng hộ qua Toss",
-                support_toss_hint: "Quét mã QR bằng ứng dụng Toss (Hàn Quốc) để gửi ủng hộ.",
                 svil_mission: "Singularity Visual Intelligence Lab: nghiên cứu và phát triển nhằm cải thiện khả năng tiếp cận AI cho người thị lực kém.",
                 foot_contact: "Liên hệ", foot_blog: "Blog", foot_home: "Trang chủ", foot_youtube: "YouTube",
                 foot_privacy_k: "Riêng tư", foot_privacy: "Chính sách bảo mật"
