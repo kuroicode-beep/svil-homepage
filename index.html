@@ -4,26 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVIL - Singularity Visual Intelligence Lab</title>
+    <meta name="description" content="SVIL은 저시력 시각장애인의 AI 접근성을 높이기 위한 연구와 개발을 하는 1인 독립 연구소입니다.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SVIL - Singularity Visual Intelligence Lab">
+    <meta property="og:description" content="Accessibility creates possibility. 저시력 시각장애인의 AI 접근성을 높이기 위한 연구와 개발.">
+    <meta property="og:url" content="https://kuroicode-beep.github.io/svil-homepage/">
+    <meta name="twitter:card" content="summary">
     <style>
+        /* ── SVIL 표준 토큰 (svil-frontend-design 정본) ── */
         :root {
-            --accent: #f5c518;
-            --accent-dim: rgba(245, 197, 24, 0.15);
-            --bg: #0a0a0a;
-            --bg-card: #111111;
-            --text: #e8e8e8;
-            --text-muted: #999;
-            --border: #2a2a2a;
+            --bg: #0d0d12;
+            --surface: #16161d;
+            --surface-2: #1f1f2a;
+            --border: #3a3a48;
+            --border-strong: #6b6b82;
+            --text: #f5f5f7;
+            --text-sub: #c9c9d4;
+            --accent: #7ec8ff;
+            --accent-strong: #b3ddff;
+            --accent-max: #d6ecff;
+            --positive: #7ee2a8;
+            --warning: #ffd479;
+            --negative: #ff9b9b;
+            --focus: #ffd479;
+            --font-ui: "LINESeedKR", "LINE Seed Sans KR", "Pretendard", "Malgun Gothic", "맑은 고딕",
+                       system-ui, -apple-system, "Segoe UI", sans-serif;
+            --font-mono: "Consolas", "Cascadia Mono", ui-monospace, "Malgun Gothic", monospace;
+            font-size: 18px; /* 가독성 버튼이 16/18/20px로 조정 */
+        }
+        @font-face {
+            font-family: "LINESeedKR";
+            src: url("./assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+            font-weight: 100 900;
+            font-display: swap;
         }
 
         * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            * { transition: none !important; animation: none !important; }
+        }
 
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            font-family: var(--font-ui);
             margin: 0;
-            line-height: 1.7;
-            font-size: 18px;
+            line-height: 1.8;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            word-break: keep-all;
+        }
+        img { max-width: 100%; }
+        .mono { font-family: var(--font-mono); }
+
+        /* ── skip link ── */
+        .skip-link {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            z-index: 300;
+            background: var(--accent-strong);
+            color: #000;
+            padding: 14px 22px;
+            border-radius: 0 0 12px 0;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .skip-link:focus { left: 0; }
+
+        /* ── focus ring 상시 ── */
+        a:focus-visible, button:focus-visible, input:focus-visible,
+        textarea:focus-visible, select:focus-visible {
+            outline: 3px solid var(--focus);
+            outline-offset: 2px;
         }
 
         /* ── Background canvas ── */
@@ -39,877 +94,1484 @@
         .wrap {
             position: relative;
             z-index: 10;
-            max-width: 960px;
+            max-width: 1080px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
         /* ── Nav ── */
-        nav {
+        nav.top {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(10, 10, 10, 0.92);
+            background: rgba(13, 13, 18, 0.94);
             border-bottom: 1px solid var(--border);
             backdrop-filter: blur(8px);
         }
         .nav-inner {
-            max-width: 960px;
+            max-width: 1080px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 8px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 64px;
+            gap: 12px;
+            flex-wrap: wrap;
+            min-height: 66px;
         }
         .nav-logo {
-            font-weight: 800;
+            font-weight: 700;
             font-size: 1.3rem;
             color: var(--accent);
             text-decoration: none;
             letter-spacing: 0.05em;
+            display: inline-flex;
+            align-items: center;
+            min-height: 50px;
         }
         .nav-links {
             display: flex;
-            gap: 28px;
+            gap: 6px;
             align-items: center;
             list-style: none;
             margin: 0;
             padding: 0;
+            flex-wrap: wrap;
         }
         .nav-links a {
-            color: var(--text-muted);
+            color: var(--text-sub);
             text-decoration: none;
             font-size: 0.95rem;
+            padding: 12px 12px;
+            min-height: 50px;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 12px;
             transition: color 0.2s;
         }
         .nav-links a:hover { color: var(--accent); }
-        .lang-btn {
-            background: none;
-            border: 1px solid var(--border);
-            color: var(--accent);
-            cursor: pointer;
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+        .nav-ctrl {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
         }
-        .lang-btn:hover {
-            background: var(--accent);
+        .fs-group {
+            display: inline-flex;
+            border: 2px solid var(--border-strong);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .fs-btn {
+            background: var(--surface-2);
+            color: var(--text);
+            border: none;
+            min-width: 50px;
+            min-height: 50px;
+            cursor: pointer;
+            font-family: var(--font-ui);
+            padding: 0 10px;
+        }
+        .fs-btn + .fs-btn { border-left: 1px solid var(--border-strong); }
+        .fs-btn[aria-pressed="true"] {
+            background: var(--accent-strong);
             color: #000;
-            border-color: var(--accent);
+            font-weight: 700;
+        }
+        .fs-btn:hover { color: var(--accent); }
+        .fs-btn[aria-pressed="true"]:hover { color: #000; background: var(--accent-max); }
+        .fs-s { font-size: 0.8rem; }
+        .fs-m { font-size: 1rem; }
+        .fs-l { font-size: 1.2rem; }
+        .lang-select {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 2px solid var(--border-strong);
+            border-radius: 12px;
+            min-height: 50px;
+            padding: 0 12px;
+            font-size: 0.95rem;
+            font-family: var(--font-ui);
+            cursor: pointer;
+        }
+        .login-btn {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 2px solid var(--border-strong);
+            border-radius: 12px;
+            min-height: 50px;
+            padding: 0 16px;
+            font-size: 0.95rem;
+            font-family: var(--font-ui);
+            cursor: pointer;
+            text-decoration: none;
+            display: none; /* API_BASE 설정 시 JS가 표시 */
+            align-items: center;
+        }
+        .login-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .login-state {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+        .role-badge {
+            border: 1.5px solid currentColor;
+            border-radius: 999px;
+            padding: 2px 10px;
+            font-size: 0.8rem;
+            color: var(--accent);
         }
 
         /* ── Hero ── */
         .hero {
-            padding: 48px 24px 80px;
+            padding: 56px 0 80px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-        .hero-logo img {
-            width: 96px;
-            height: 96px;
-            margin-bottom: 20px;
-        }
+        .hero-logo img { width: 96px; height: 96px; margin-bottom: 20px; }
         .hero-brand-name {
-            font-size: 28px;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            color: #ffffff;
-        }
-        .hero-brand-full {
-            margin-top: 6px;
-            font-size: 16px;
-            color: #ffd400;
-        }
-        .hero-message {
-            margin-top: 36px;
-            max-width: 980px;
-        }
-        .hero-line {
-            margin: 0;
-            line-height: 1.6;
-        }
-        .hero-line-1 {
-            font-size: clamp(28px, 4vw, 52px);
-            font-weight: 800;
-            color: #ffd400;
-            margin-bottom: 24px;
-        }
-        .hero-line-2 {
-            font-size: clamp(24px, 3.4vw, 44px);
+            font-size: 1.6rem;
             font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 24px;
-        }
-        .hero-line-3 {
-            font-size: clamp(18px, 2vw, 28px);
-            font-weight: 500;
-            color: #ffffff;
-            opacity: 0.92;
-        }
-        .hero-btns {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 40px;
-        }
-        .btn {
-            display: inline-block;
-            padding: 14px 32px;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-        }
-        .btn-primary {
-            background: var(--accent);
-            color: #000;
-        }
-        .btn-primary:hover {
-            background: #ffd740;
-            transform: translateY(-2px);
-        }
-        .btn-outline {
-            background: transparent;
-            border-color: var(--border);
+            letter-spacing: 0.08em;
             color: var(--text);
         }
-        .btn-outline:hover {
-            border-color: var(--accent);
+        .hero-brand-full {
+            margin-top: 4px;
+            font-size: 0.95rem;
             color: var(--accent);
         }
+        .hero-slogan {
+            margin: 34px 0 0;
+            font-size: clamp(30px, 4.4vw, 54px);
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--accent-strong);
+        }
+        .hero-sub {
+            margin: 22px 0 0;
+            max-width: 860px;
+        }
+        .hero-sub p { margin: 6px 0; }
+        .hero-sub .s1 { font-size: clamp(20px, 2.6vw, 30px); font-weight: 700; color: var(--text); }
+        .hero-sub .s2 { font-size: clamp(17px, 2vw, 24px); color: var(--text); }
+        .hero-sub .s3 { font-size: clamp(16px, 1.8vw, 21px); color: var(--text-sub); }
+        .hero-btns {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 38px;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 54px;
+            padding: 0 30px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            border: 2px solid transparent;
+            font-family: var(--font-ui);
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .btn-primary { background: var(--accent-strong); color: #000; }
+        .btn-primary:hover { background: var(--accent-max); }
+        .btn-outline {
+            background: var(--surface-2);
+            border-color: var(--border-strong);
+            color: var(--text);
+        }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent-strong); }
 
         /* ── Sections ── */
-        section { padding: 80px 0; }
-        section + section { border-top: 1px solid var(--border); }
-
+        section.block { padding: 76px 0; border-top: 1px solid var(--border); }
         .section-label {
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 12px;
+            margin: 0 0 10px;
         }
         .section-title {
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 1.7rem;
+            font-weight: 700;
             color: var(--text);
-            margin: 0 0 16px;
-            line-height: 1.2;
+            margin: 0 0 14px;
+            line-height: 1.3;
         }
         .section-desc {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 640px;
-            margin-bottom: 52px;
+            font-size: 1.05rem;
+            color: var(--text-sub);
+            max-width: 720px;
+            margin: 0 0 40px;
         }
 
         /* ── Cards ── */
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 22px;
         }
         .card {
-            background: var(--bg-card);
+            background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 28px;
-            transition: border-color 0.2s, transform 0.2s;
+            border-radius: 16px;
+            padding: 24px;
+            transition: border-color 0.2s;
         }
-        .card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-        }
-        .card-icon {
-            font-size: 1.8rem;
-            margin-bottom: 16px;
-        }
+        .card:hover { border-color: var(--accent); }
+        .card-icon { font-size: 1.8rem; line-height: 1; margin-bottom: 14px; }
         .card-title {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 700;
-            color: var(--accent);
-            margin-bottom: 10px;
+            color: var(--accent-strong);
+            margin: 0 0 10px;
         }
         .card-desc {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.6;
+            font-size: 0.97rem;
+            color: var(--text-sub);
+            margin: 0 0 16px;
         }
-
-        /* ── Project cards ── */
-        .project-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 32px;
-            transition: border-color 0.2s, transform 0.2s;
-        }
-        .project-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-4px);
-        }
-        .project-tag {
-            display: inline-block;
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--accent);
-            background: var(--accent-dim);
-            padding: 4px 10px;
-            border-radius: 4px;
-            margin-bottom: 14px;
-        }
-        .project-name {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 10px;
-        }
-        .project-desc {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        .project-points {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .project-points li {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            background: #1a1a1a;
-            border: 1px solid var(--border);
-            padding: 4px 10px;
-            border-radius: 4px;
-        }
-        .project-link {
-            display: inline-block;
-            margin-top: 18px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--accent);
-            text-decoration: none;
-        }
-        .project-link:hover { text-decoration: underline; }
-
-        /* ── Lab Log ── */
-        .lablog-placeholder {
-            background: var(--bg-card);
-            border: 1px dashed var(--border);
-            border-radius: 10px;
-            padding: 48px 32px;
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* ── Links section ── */
-        .links-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-        }
-        .link-card {
-            display: flex;
+        .chip-row { display: flex; flex-wrap: wrap; gap: 10px; }
+        .chip {
+            display: inline-flex;
             align-items: center;
-            gap: 14px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 22px 24px;
-            text-decoration: none;
+            min-height: 44px;
+            padding: 4px 16px;
+            border: 1.5px solid var(--border-strong);
+            border-radius: 999px;
             color: var(--text);
-            transition: border-color 0.2s, transform 0.2s;
-        }
-        .link-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-            color: var(--accent);
-        }
-        .link-icon {
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-        .link-label {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        .link-handle {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-        .link-card:hover .link-handle { color: inherit; }
-        .link-notice {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 20px;
-            padding: 12px 16px;
-            background: #1a1500;
-            border: 1px solid #3a3000;
-            border-radius: 6px;
-        }
-
-        /* ── Contact ── */
-        .contact-block {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 40px;
-            max-width: 480px;
-        }
-        .contact-block .email-link {
-            display: inline-block;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--accent);
             text-decoration: none;
-            margin-top: 8px;
+            font-size: 0.88rem;
+            background: var(--surface-2);
+            transition: border-color 0.2s, color 0.2s;
         }
-        .contact-block .email-link:hover { text-decoration: underline; }
+        .chip:hover { border-color: var(--accent); color: var(--accent-strong); }
 
-        /* ── Philosophy ── */
-        .philosophy-block {
+        /* ── Projects ── */
+        .proj-group { margin-bottom: 46px; }
+        .proj-group:last-child { margin-bottom: 0; }
+        .proj-group-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0 0 18px;
+            padding-left: 14px;
             border-left: 4px solid var(--accent);
-            padding: 24px 32px;
-            background: var(--accent-dim);
-            border-radius: 0 8px 8px 0;
-            margin-bottom: 20px;
         }
-        .philosophy-block p {
-            font-size: 1.2rem;
-            font-style: italic;
-            color: var(--text);
-            margin: 0;
-            line-height: 1.6;
+        .proj-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 26px;
+            transition: border-color 0.2s;
         }
+        .proj-card:hover { border-color: var(--accent); }
+        .proj-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+        .proj-name { font-size: 1.2rem; font-weight: 700; color: var(--text); margin: 0; }
+        .proj-ver { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-sub); }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border: 1.5px solid currentColor;
+            border-radius: 999px;
+            padding: 2px 12px;
+            font-size: 0.8rem;
+        }
+        .badge-live { color: var(--positive); }
+        .badge-dl { color: var(--accent); }
+        .badge-wip { color: var(--warning); }
+        .proj-desc { font-size: 0.95rem; color: var(--text-sub); margin: 0 0 16px; }
+        .txt-flow {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px 20px;
+            font-size: 0.95rem;
+            margin: 0 0 18px;
+            overflow-x: auto;
+        }
+        .txt-flow b { color: var(--accent-strong); font-weight: 700; }
+        .txt-apps { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; padding: 0; list-style: none; }
+        .txt-apps li {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .txt-apps li a { color: var(--accent); text-decoration: none; }
+        .txt-apps li a:hover { text-decoration: underline; }
 
-        /* ── Footer ── */
+        /* ── Content(YouTube/Blog) ── */
+        .yt-card {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 34px;
+        }
+        .yt-card .yt-name { font-size: 1.2rem; font-weight: 700; margin: 0; }
+        .yt-card .yt-stat { color: var(--text-sub); font-size: 0.92rem; }
+        .sub-heading { font-size: 1.15rem; font-weight: 700; margin: 0 0 16px; color: var(--text); }
+        .pl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+            margin-bottom: 40px;
+        }
+        .pl-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            min-height: 54px;
+            color: var(--text);
+            text-decoration: none;
+            transition: border-color 0.2s;
+        }
+        .pl-item:hover { border-color: var(--accent); color: var(--accent-strong); }
+        .pl-count { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-sub); flex: none; }
+        .blog-list { display: grid; gap: 14px; margin-bottom: 22px; }
+        .blog-item {
+            display: block;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: var(--text);
+            text-decoration: none;
+            transition: border-color 0.2s;
+        }
+        .blog-item:hover { border-color: var(--accent); color: var(--accent-strong); }
+
+        /* ── Notices ── */
+        .notice-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+        .notice-list a {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 14px 18px;
+            min-height: 54px;
+            color: var(--text);
+            text-decoration: none;
+            transition: border-color 0.2s;
+        }
+        .notice-list a:hover { border-color: var(--accent); color: var(--accent-strong); }
+        .notice-date { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-sub); flex: none; }
+        .notice-note { color: var(--text-sub); font-size: 0.95rem; }
+
+        /* ── Contact form + Support ── */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            align-items: start;
+        }
+        .form-card, .support-card-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+        }
+        .form-card label {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            margin: 0 0 6px;
+        }
+        .form-card input, .form-card textarea {
+            width: 100%;
+            background: var(--surface-2);
+            color: var(--text);
+            border: 2px solid var(--border-strong);
+            border-radius: 12px;
+            min-height: 50px;
+            padding: 12px 14px;
+            font-size: 1rem;
+            font-family: var(--font-ui);
+            margin-bottom: 16px;
+        }
+        .form-card textarea { min-height: 140px; resize: vertical; }
+        .form-msg { font-size: 0.95rem; margin: 10px 0 0; }
+        .form-msg.ok { color: var(--positive); }
+        .form-msg.fail { color: var(--negative); }
+        .collab-line { margin-top: 18px; font-size: 0.95rem; color: var(--text-sub); }
+        .collab-line a { color: var(--accent); }
+        .hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+        .support-card { display: flex; gap: 26px; align-items: center; flex-wrap: wrap; }
+        .qr-frame { background: #fff; border-radius: 12px; padding: 14px; flex: none; line-height: 0; }
+        .qr-frame img { display: block; width: 216px; height: 216px; }
+        .qr-meta { display: flex; flex-direction: column; gap: 6px; min-width: 200px; flex: 1; }
+        .qr-meta b { font-weight: 700; font-size: 1.2rem; color: var(--accent-strong); }
+        .qr-meta span { color: var(--text-sub); font-size: 0.95rem; }
+
+        /* ── Footer (svil-copyright 정본) ── */
         footer {
             border-top: 1px solid var(--border);
             padding: 48px 0;
-            color: var(--text-muted);
-            font-size: 0.9rem;
+            color: var(--text-sub);
+            font-size: 0.95rem;
             position: relative;
             z-index: 10;
         }
-        .footer-inner {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 0 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-            text-align: center;
-        }
-        .footer-logo {
-            font-size: 1.2rem;
-            font-weight: 800;
+        .svil-mission { margin: 0 0 22px; }
+        .foot-rows { display: grid; gap: 8px; margin-bottom: 22px; }
+        .foot-rows .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .foot-rows .k { color: var(--text-sub); min-width: 90px; }
+        .foot-rows a {
             color: var(--accent);
-            letter-spacing: 0.05em;
-        }
-        .footer-nav {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .footer-nav a {
-            color: var(--text-muted);
             text-decoration: none;
-            transition: color 0.2s;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
         }
-        .footer-nav a:hover { color: var(--accent); }
-        .footer-copy {
-            font-size: 0.8rem;
-            color: #555;
-        }
+        .foot-rows a:hover { text-decoration: underline; }
+        .copyright { font-size: 0.88rem; color: var(--text-sub); margin: 0; }
 
         /* ── Responsive ── */
         @media (max-width: 768px) {
-            .hero { padding: 36px 18px 60px; }
-            .hero-logo img { width: 72px; height: 72px; }
-            .hero-brand-name { font-size: 22px; }
-            .hero-brand-full { font-size: 14px; }
-        }
-        @media (max-width: 640px) {
-            body { font-size: 16px; }
-            .section-title { font-size: 1.6rem; }
             .nav-links { display: none; }
-            .contact-block { padding: 28px 20px; }
+            .hero { padding: 40px 0 60px; }
+            .hero-logo img { width: 72px; height: 72px; }
+        }
+        @media (max-width: 480px) {
+            .btn { width: 100%; }
+            .hero-btns { width: 100%; }
+            .support-card { justify-content: center; text-align: center; }
+            .qr-meta { align-items: center; }
         }
     </style>
 </head>
 <body>
-    <canvas id="bg-canvas"></canvas>
+    <a class="skip-link" href="#main" data-i18n="skip_link">본문 바로가기</a>
+    <canvas id="bg-canvas" aria-hidden="true"></canvas>
 
     <!-- ── Navigation ── -->
-    <nav>
+    <nav class="top" aria-label="주 메뉴">
         <div class="nav-inner">
-            <a href="#hero" class="nav-logo">SVIL</a>
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#about" id="nav-about">About</a></li>
-                <li><a href="#research" id="nav-research">Research</a></li>
-                <li><a href="#projects" id="nav-projects">Projects</a></li>
-                <li><a href="#lablog" id="nav-lablog">Lab Log</a></li>
-                <li><a href="#links" id="nav-links-section">Links</a></li>
+            <a href="#main" class="nav-logo">SVIL</a>
+            <ul class="nav-links">
+                <li><a href="#about" data-i18n="nav_about">소개</a></li>
+                <li><a href="#research" data-i18n="nav_research">연구 분야</a></li>
+                <li><a href="#projects" data-i18n="nav_projects">프로젝트</a></li>
+                <li><a href="#content" data-i18n="nav_content">콘텐츠</a></li>
+                <li><a href="#notice" data-i18n="nav_notice">공지</a></li>
+                <li><a href="#contact" data-i18n="nav_contact">문의</a></li>
             </ul>
-            <button class="lang-btn" onclick="toggleLang()">한국어 / English</button>
+            <div class="nav-ctrl">
+                <div class="fs-group" role="group" id="fs-group">
+                    <button type="button" class="fs-btn fs-s" data-fs="16" aria-pressed="false">가</button>
+                    <button type="button" class="fs-btn fs-m" data-fs="18" aria-pressed="true">가</button>
+                    <button type="button" class="fs-btn fs-l" data-fs="20" aria-pressed="false">가</button>
+                </div>
+                <select class="lang-select" id="lang-select" aria-label="Language">
+                    <option value="ko">한국어</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                    <option value="zh">中文</option>
+                    <option value="vi">Tiếng Việt</option>
+                </select>
+                <a class="login-btn" id="login-btn" href="#" data-i18n="btn_login">로그인</a>
+                <span class="login-state" id="login-state">
+                    <span id="login-name"></span>
+                    <span class="role-badge" id="login-role"></span>
+                    <button type="button" class="fs-btn" id="logout-btn" data-i18n="btn_logout" style="border:2px solid var(--border-strong);border-radius:12px;">로그아웃</button>
+                </span>
+            </div>
         </div>
     </nav>
 
-    <!-- ── Hero ── -->
-    <div class="wrap" id="hero">
-        <section class="hero">
-            <div class="hero-logo">
-                <img src="./assets/svil-logo.svg" alt="SVIL logo" width="96" height="96" />
-            </div>
-            <div class="hero-brand">
-                <div class="hero-brand-name" id="hero-brand-name">SVIL</div>
-                <div class="hero-brand-full" id="hero-brand-full">Singularity Visual Intelligence Lab</div>
-            </div>
-            <div class="hero-message">
-                <p class="hero-line hero-line-1" id="hero-line-1">접근성은 평등한 기회를 만듭니다.</p>
-                <p class="hero-line hero-line-2" id="hero-line-2">접근 가능한 도구만 있다면<br>저시력 시각장애인도 무엇이든 만들 수 있습니다.</p>
-                <p class="hero-line hero-line-3" id="hero-line-3">SVIL은 이런 도구를 연구하고 개발합니다.</p>
-            </div>
-            <div class="hero-btns">
-                <a href="#projects" class="btn btn-primary" id="btn-projects">View Projects</a>
-                <a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener noreferrer" class="btn btn-outline" id="btn-github">GitHub</a>
-                <a href="#lablog" class="btn btn-outline" id="btn-lablog">Lab Log</a>
-            </div>
-        </section>
-    </div>
+    <main id="main">
+        <!-- ── Hero ── -->
+        <div class="wrap">
+            <section class="hero" aria-labelledby="hero-slogan">
+                <div class="hero-logo">
+                    <img src="./assets/svil-logo.svg" alt="SVIL 로고" width="96" height="96">
+                </div>
+                <h1 style="margin:0;">
+                    <span class="hero-brand-name">SVIL</span><br>
+                    <span class="hero-brand-full">Singularity Visual Intelligence Lab</span>
+                </h1>
+                <p class="hero-slogan" id="hero-slogan">Accessibility creates possibility.</p>
+                <div class="hero-sub">
+                    <p class="s1" data-i18n="hero_sub1">접근성이 확보되면 가능성이 생깁니다.</p>
+                    <p class="s2" data-i18n="hero_sub2">접근 가능한 도구만 있다면 저시력 시각장애인도 무엇이든 만들 수 있습니다.</p>
+                    <p class="s3" data-i18n="hero_sub3">SVIL은 이런 도구를 연구하고 개발합니다.</p>
+                </div>
+                <div class="hero-btns">
+                    <a href="#projects" class="btn btn-primary" data-i18n="btn_projects">프로젝트 보기</a>
+                    <a href="https://www.youtube.com/@SVIL-LAB" target="_blank" rel="noopener noreferrer" class="btn btn-outline">YouTube</a>
+                    <a href="https://ghost-production-0ec2.up.railway.app/" target="_blank" rel="noopener noreferrer" class="btn btn-outline" data-i18n="btn_blog">블로그</a>
+                </div>
+            </section>
+        </div>
 
-    <!-- ── About ── -->
-    <div class="wrap" id="about">
-        <section>
-            <p class="section-label">About</p>
-            <h2 class="section-title" id="about-title">About SVIL</h2>
-            <p class="section-desc" id="about-desc">
-                SVIL is an independent lab exploring AI tools,
-                accessibility, and cognition after vision loss.
-            </p>
-            <div class="philosophy-block">
-                <p id="philosophy-text">Accessibility first.<br>We build tools that remain usable when vision changes.</p>
-            </div>
-            <p id="about-extra" style="color: var(--text-muted); font-size: 1rem; max-width: 640px;">
-                We do not aim for perfection. We aim to leave something behind.
-            </p>
-        </section>
-    </div>
-
-    <!-- ── Research ── -->
-    <div class="wrap" id="research">
-        <section>
-            <p class="section-label">Research</p>
-            <h2 class="section-title" id="research-title">Research Areas</h2>
-            <p class="section-desc" id="research-desc">Four core research domains at SVIL.</p>
-            <div class="grid" id="research-grid"></div>
-        </section>
-    </div>
-
-    <!-- ── Projects ── -->
-    <div class="wrap" id="projects">
-        <section>
-            <p class="section-label">Projects</p>
-            <h2 class="section-title" id="projects-title">Major Projects</h2>
-            <p class="section-desc" id="projects-desc">Tools and experiments built at SVIL.</p>
-            <div class="grid" id="projects-grid"></div>
-        </section>
-    </div>
-
-    <!-- ── Lab Log ── -->
-    <div class="wrap" id="lablog">
-        <section>
-            <p class="section-label">Lab Log</p>
-            <h2 class="section-title" id="lablog-title">Lab Log</h2>
-            <p class="section-desc" id="lablog-desc">Development notes, experiments, writing, and content from SVIL.</p>
-            <div class="lablog-placeholder" id="lablog-placeholder">
-                개발 로그, AI 실험, 접근성 연구 기록, 문화 콘텐츠는 준비 중입니다.<br>
-                <span style="font-size:0.85rem;">Blog and YouTube updates coming soon.</span>
-            </div>
-        </section>
-    </div>
-
-    <!-- ── External Links ── -->
-    <div class="wrap" id="links">
-        <section>
-            <p class="section-label">Links</p>
-            <h2 class="section-title" id="links-title">External Links</h2>
-            <p class="section-desc" id="links-desc">Channels and contact points for SVIL.</p>
-            <div class="links-grid">
-                <a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener noreferrer" class="link-card" id="link-github">
-                    <span class="link-icon">&#128025;</span>
-                    <div>
-                        <div class="link-label">GitHub</div>
-                        <div class="link-handle">kuroicode-beep</div>
-                    </div>
-                </a>
-                <a href="https://inbluelog.blogspot.com/" target="_blank" rel="noopener noreferrer" class="link-card" id="link-blog">
-                    <span class="link-icon">&#128221;</span>
-                    <div>
-                        <div class="link-label">Blog</div>
-                        <div class="link-handle">inbluelog.blogspot.com</div>
-                    </div>
-                </a>
-                <a href="https://www.youtube.com/@%EC%8B%A4%EC%9A%A9%EC%BD%94%EB%94%A9" target="_blank" rel="noopener noreferrer" class="link-card" id="link-youtube">
-                    <span class="link-icon">&#127916;</span>
-                    <div>
-                        <div class="link-label">YouTube</div>
-                        <div class="link-handle">@실용코딩</div>
-                    </div>
-                </a>
-                <a href="mailto:kuroicode@gmail.com" class="link-card">
-                    <span class="link-icon">&#9993;</span>
-                    <div>
-                        <div class="link-label">Email</div>
-                        <div class="link-handle">kuroicode@gmail.com</div>
-                    </div>
-                </a>
-            </div>
-        </section>
-    </div>
-
-    <!-- ── Contact ── -->
-    <div class="wrap" id="contact">
-        <section>
-            <p class="section-label">Contact</p>
-            <h2 class="section-title" id="contact-title">Contact</h2>
-            <div class="contact-block">
-                <p id="contact-desc" style="color: var(--text-muted); margin: 0 0 12px; font-size: 1rem;">
-                    이메일로 연락해 주세요.
+        <!-- ── About ── -->
+        <div class="wrap" id="about">
+            <section class="block">
+                <p class="section-label">About</p>
+                <h2 class="section-title" data-i18n="about_title">연구소 소개</h2>
+                <p class="section-desc" data-i18n="about_p1">
+                    SVIL(Singularity Visual Intelligence Lab)은 시각장애인을 포함한 접근성 취약 계층을 위한
+                    AI 도구, 교육 커리큘럼, 콘텐츠 시스템을 연구·개발하는 1인 독립 연구소입니다.
                 </p>
-                <a href="mailto:kuroicode@gmail.com" class="email-link">kuroicode@gmail.com</a>
-            </div>
-        </section>
-    </div>
+                <div class="card" style="max-width:760px;">
+                    <h3 class="card-title" data-i18n="phil_title">철학</h3>
+                    <ul style="margin:0;padding-left:1.2em;color:var(--text);">
+                        <li data-i18n="phil_1">AI를 도구가 아닌 협업 동료로 대합니다.</li>
+                        <li data-i18n="phil_2">접근성은 추가 기능이 아닌 기본 설계 원칙입니다.</li>
+                        <li data-i18n="phil_3">도구가 수익을 만드는 구조를 지향합니다.</li>
+                        <li data-i18n="phil_4">비슷한 처지의 사람들에게 불씨가 되는 것이 핵심 동기입니다.</li>
+                        <li data-i18n="phil_5">기술보다 구조. 기록 없는 작업은 완료가 아닙니다.</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
 
-    <!-- ── Footer ── -->
+        <!-- ── Research ── -->
+        <div class="wrap" id="research">
+            <section class="block">
+                <p class="section-label">Research</p>
+                <h2 class="section-title" data-i18n="research_title">연구 분야</h2>
+                <p class="section-desc" data-i18n="research_desc">SVIL의 다섯 가지 핵심 연구 분야입니다.</p>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-icon" aria-hidden="true">🧩</div>
+                        <h3 class="card-title" data-i18n="r1_title">저시력자 앱 개발</h3>
+                        <p class="card-desc" data-i18n="r1_desc">고대비·큰 글씨·키보드 우선 원칙으로 저시력 사용자가 실제로 쓸 수 있는 앱을 만듭니다.</p>
+                        <div class="chip-row">
+                            <a class="chip" href="#projects" data-i18n="chip_projects">프로젝트 보기</a>
+                            <a class="chip" href="https://www.youtube.com/playlist?list=PLc0q-VzJxDEI" target="_blank" rel="noopener noreferrer"><span data-i18n="lbl_playlist">재생목록</span>&nbsp;· SVIL 앱 소개</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" aria-hidden="true">⚙️</div>
+                        <h3 class="card-title" data-i18n="r2_title">워크플로우 개발</h3>
+                        <p class="card-desc" data-i18n="r2_desc">AI 에이전트 협업, 로컬 AI 파이프라인 등 1인 연구소를 굴리는 작업 방식 자체를 설계하고 공유합니다.</p>
+                        <div class="chip-row">
+                            <a class="chip" href="https://www.youtube.com/playlist?list=PLQAJd0ZswpdE" target="_blank" rel="noopener noreferrer"><span data-i18n="lbl_playlist">재생목록</span>&nbsp;· AI 활용 &amp; 개발 워크플로우</a>
+                            <a class="chip" href="https://github.com/kuroicode-beep" target="_blank" rel="noopener noreferrer">GitHub</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" aria-hidden="true">🎬</div>
+                        <h3 class="card-title" data-i18n="r3_title">저시력자용 콘텐츠 개발</h3>
+                        <p class="card-desc" data-i18n="r3_desc">저시력 관점의 영상·글·창작 콘텐츠를 만들고, 기술과 저시력 경험을 잇는 문화 작업을 지속합니다.</p>
+                        <div class="chip-row">
+                            <a class="chip" href="https://www.youtube.com/@SVIL-LAB" target="_blank" rel="noopener noreferrer"><span data-i18n="lbl_channel">유튜브 채널</span></a>
+                            <a class="chip" href="https://www.youtube.com/playlist?list=PLOG0Nnd-DxGk" target="_blank" rel="noopener noreferrer"><span data-i18n="lbl_playlist">재생목록</span>&nbsp;· 저시력 접근성 이야기</a>
+                            <a class="chip" href="https://ghost-production-0ec2.up.railway.app/" target="_blank" rel="noopener noreferrer"><span data-i18n="lbl_blog">블로그</span></a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" aria-hidden="true">🔬</div>
+                        <h3 class="card-title" data-i18n="r4_title">시각장애 관련 연구</h3>
+                        <p class="card-desc" data-i18n="r4_desc">시력 저하 이후의 뇌가소성과 인지 변화, AI 활용과 인지 확장의 관계를 자기 관찰 기반으로 탐구합니다.</p>
+                        <div class="chip-row">
+                            <a class="chip" href="https://www.youtube.com/playlist?list=PLbQFvYl3LyCQ" target="_blank" rel="noopener noreferrer"><span data-i18n="lbl_playlist">재생목록</span>&nbsp;· 과학 &amp; SVIL 연구노트</a>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" aria-hidden="true">📚</div>
+                        <h3 class="card-title" data-i18n="r5_title">교육 커리큘럼</h3>
+                        <p class="card-desc" data-i18n="r5_desc">저시력자를 위한 AI 활용 교육 커리큘럼을 만들어 블로그와 유튜브로 연재합니다.</p>
+                        <div class="chip-row">
+                            <a class="chip" href="https://www.youtube.com/playlist?list=PLKbdnXx9kheI" target="_blank" rel="noopener noreferrer"><span data-i18n="lbl_playlist">재생목록</span>&nbsp;· AI 기초 및 활용</a>
+                            <a class="chip" href="https://www.youtube.com/playlist?list=PLJrLx2NwWmAQ" target="_blank" rel="noopener noreferrer"><span data-i18n="lbl_playlist">재생목록</span>&nbsp;· 클로드 기초 및 활용</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ── Projects ── -->
+        <div class="wrap" id="projects">
+            <section class="block">
+                <p class="section-label">Projects</p>
+                <h2 class="section-title" data-i18n="proj_title">프로젝트</h2>
+                <p class="section-desc" data-i18n="proj_desc">SVIL이 만들고 운영하는 도구들입니다. 랜딩페이지와 GitHub에서 바로 확인할 수 있습니다.</p>
+
+                <div class="proj-group">
+                    <h3 class="proj-group-title" data-i18n="g1_title">저시력 접근성 도구</h3>
+                    <div class="grid">
+                        <div class="proj-card">
+                            <div class="proj-head">
+                                <h4 class="proj-name">Audio Hotkeys</h4>
+                                <span class="proj-ver">v1.6.0</span>
+                                <span class="badge badge-dl" data-i18n="badge_dl">다운로드</span>
+                            </div>
+                            <p class="proj-desc" data-i18n="p_ah_desc">오디오 입·출력 장치와 볼륨 스냅샷을 단축키 한 번으로 전환하는 Windows 트레이 앱.</p>
+                            <div class="chip-row">
+                                <a class="chip" href="https://kuroicode-beep.github.io/audio-hotkeys/" target="_blank" rel="noopener noreferrer" data-i18n="lbl_landing">배포페이지</a>
+                                <a class="chip" href="https://github.com/kuroicode-beep/audio-hotkeys" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            </div>
+                        </div>
+                        <div class="proj-card">
+                            <div class="proj-head">
+                                <h4 class="proj-name">Smart Alt-Tab</h4>
+                                <span class="proj-ver">v0.5.0</span>
+                                <span class="badge badge-dl" data-i18n="badge_intro">소개 페이지</span>
+                            </div>
+                            <p class="proj-desc" data-i18n="p_sat_desc">Windows Alt+Tab을 대체하는 저시력 친화 창 전환기. 큰 글씨·고대비로 열린 창을 보여줍니다.</p>
+                            <div class="chip-row">
+                                <a class="chip" href="https://kuroicode-beep.github.io/smart-alt-tab/" target="_blank" rel="noopener noreferrer" data-i18n="lbl_landing">배포페이지</a>
+                                <a class="chip" href="https://github.com/kuroicode-beep/smart-alt-tab" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="proj-group">
+                    <h3 class="proj-group-title" data-i18n="g2_title">저시력 문화·취미 앱</h3>
+                    <div class="grid">
+                        <div class="proj-card">
+                            <div class="proj-head">
+                                <h4 class="proj-name">SingPromfter</h4>
+                                <span class="proj-ver">v3.17.0</span>
+                                <span class="badge badge-dl" data-i18n="badge_dl">다운로드</span>
+                            </div>
+                            <p class="proj-desc" data-i18n="p_sp_desc">MR과 함께 가사를 크게 보여주는 저시력 가사 프롬프터 + 보컬 트레이닝 데스크톱 앱.</p>
+                            <div class="chip-row">
+                                <a class="chip" href="https://kuroicode-beep.github.io/SingPromfter/" target="_blank" rel="noopener noreferrer" data-i18n="lbl_landing">배포페이지</a>
+                                <a class="chip" href="https://github.com/kuroicode-beep/SingPromfter" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            </div>
+                        </div>
+                        <div class="proj-card">
+                            <div class="proj-head">
+                                <h4 class="proj-name">SVIL Tarot</h4>
+                                <span class="proj-ver">v1.3.0</span>
+                                <span class="badge badge-live" data-i18n="badge_live">바로 사용</span>
+                            </div>
+                            <p class="proj-desc" data-i18n="p_tarot_desc">저시력 친화 타로 학습·실전·AI 리딩 웹앱. 설치 없이 브라우저에서 바로 사용합니다.</p>
+                            <div class="chip-row">
+                                <a class="chip" href="https://kuroicode-beep.github.io/SVIL-Tarot/" target="_blank" rel="noopener noreferrer" data-i18n="lbl_use">바로 사용</a>
+                                <a class="chip" href="https://github.com/kuroicode-beep/SVIL-Tarot" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            </div>
+                        </div>
+                        <div class="proj-card">
+                            <div class="proj-head">
+                                <h4 class="proj-name">SVIL Baduk</h4>
+                                <span class="proj-ver">v0.8.0</span>
+                                <span class="badge badge-dl" data-i18n="badge_dev">개발 진행</span>
+                            </div>
+                            <p class="proj-desc" data-i18n="p_baduk_desc">저시력 고대비 바둑. 배우기·혼자 두기(AI)·P2P 멀티 대국을 지원합니다.</p>
+                            <div class="chip-row">
+                                <a class="chip" href="https://github.com/kuroicode-beep/svil-baduk" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="proj-group">
+                    <h3 class="proj-group-title" data-i18n="g3_title">TXT 패밀리 — 개인 지능 생태계</h3>
+                    <div class="proj-card">
+                        <p class="proj-desc" data-i18n="txt_desc">
+                            로컬 우선(Local-first) 개인 지능 생태계입니다. 기억을 담는 세 축(일기·문서·AI 대화)을 만들고,
+                            그것을 보고(시각화), 잇는(연결·생성) 구조로 이어집니다. 여덟 개 앱이 로컬 레지스트리로 서로를
+                            발견하고 연동되는 하나의 제품군입니다.
+                        </p>
+                        <p class="txt-flow">
+                            <span data-i18n="txt_axis">기억 3축</span> (TXTDiary · TXTBrain · TXTAIMemory)
+                            → <b><span data-i18n="txt_view">보기</span></b> (TXTSpace)
+                            → <b><span data-i18n="txt_link">잇기</span></b> (TXTMyWorld)
+                            &nbsp;+&nbsp; <span data-i18n="txt_util">수집·통합</span> (TXTDrop · TXTTray)
+                        </p>
+                        <ul class="txt-apps">
+                            <li>TXTDiary</li>
+                            <li><a href="https://kuroicode-beep.github.io/TXTBrain-homepage/" target="_blank" rel="noopener noreferrer">TXTBrain ↗</a></li>
+                            <li>TXTAIMemory</li>
+                            <li>TXTSpace</li>
+                            <li><a href="https://github.com/kuroicode-beep/TXTMyWorld" target="_blank" rel="noopener noreferrer">TXTMyWorld ↗</a></li>
+                            <li><a href="https://github.com/kuroicode-beep/TXTDrop" target="_blank" rel="noopener noreferrer">TXTDrop ↗</a></li>
+                            <li>TXTTray</li>
+                            <li>TXTPromfter</li>
+                        </ul>
+                        <div class="chip-row">
+                            <a class="chip" href="https://kuroicode-beep.github.io/TXTBrain-homepage/" target="_blank" rel="noopener noreferrer">TXTBrain <span data-i18n="lbl_landing_in">랜딩페이지</span></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="proj-group">
+                    <h3 class="proj-group-title" data-i18n="g4_title">그 외 프로젝트</h3>
+                    <div class="grid">
+                        <div class="proj-card">
+                            <div class="proj-head">
+                                <h4 class="proj-name">Tether</h4>
+                                <span class="badge badge-live" data-i18n="badge_live">바로 사용</span>
+                            </div>
+                            <p class="proj-desc" data-i18n="p_tether_desc">둘만 쓰는 커플 전용 PWA. 채팅·기록을 하나의 사적인 공간에 담습니다.</p>
+                            <div class="chip-row">
+                                <a class="chip" href="https://tether-d1dab.web.app/" target="_blank" rel="noopener noreferrer" data-i18n="lbl_use">바로 사용</a>
+                                <a class="chip" href="https://github.com/kuroicode-beep/tether" target="_blank" rel="noopener noreferrer">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="proj-group">
+                    <h3 class="proj-group-title" data-i18n="g5_title">진행 중인 프로젝트</h3>
+                    <div class="grid">
+                        <div class="proj-card">
+                            <div class="proj-head">
+                                <h4 class="proj-name" data-i18n="wip1_name">시각장애인 복지·정책·정보 앱</h4>
+                                <span class="badge badge-wip" data-i18n="badge_wip">개발 중</span>
+                            </div>
+                            <p class="proj-desc" data-i18n="wip1_desc">시각장애인에게 필요한 복지 제도·정책·생활 정보를 접근성 있게 모아 전하는 앱을 준비하고 있습니다.</p>
+                        </div>
+                        <div class="proj-card">
+                            <div class="proj-head">
+                                <h4 class="proj-name" data-i18n="wip2_name">저시력자 교육 콘텐츠 TTS·영상 모바일 앱</h4>
+                                <span class="badge badge-wip" data-i18n="badge_wip">개발 중</span>
+                            </div>
+                            <p class="proj-desc" data-i18n="wip2_desc">교육 콘텐츠를 TTS 음성과 영상으로 듣고 볼 수 있는 저시력자용 모바일 앱을 준비하고 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ── Content ── -->
+        <div class="wrap" id="content">
+            <section class="block">
+                <p class="section-label">Content</p>
+                <h2 class="section-title" data-i18n="content_title">콘텐츠</h2>
+                <p class="section-desc" data-i18n="content_desc">유튜브 채널과 블로그에서 SVIL의 기록을 만날 수 있습니다.</p>
+
+                <div class="yt-card">
+                    <div style="flex:1;min-width:220px;">
+                        <p class="yt-name">SVIL 시각지능 연구소</p>
+                        <p class="yt-stat" data-i18n="yt_stat">유튜브 · 영상 95개 · 재생목록 8개</p>
+                    </div>
+                    <a class="btn btn-primary" href="https://www.youtube.com/@SVIL-LAB" target="_blank" rel="noopener noreferrer" data-i18n="yt_visit">채널 방문</a>
+                </div>
+
+                <h3 class="sub-heading" data-i18n="pl_heading">재생목록</h3>
+                <div class="pl-grid">
+                    <a class="pl-item" href="https://www.youtube.com/playlist?list=PLSiyi3Do6JI0" target="_blank" rel="noopener noreferrer"><span>AI 뉴스</span><span class="pl-count">68</span></a>
+                    <a class="pl-item" href="https://www.youtube.com/playlist?list=PLKbdnXx9kheI" target="_blank" rel="noopener noreferrer"><span>AI 기초 및 활용</span><span class="pl-count">15</span></a>
+                    <a class="pl-item" href="https://www.youtube.com/playlist?list=PLS9M1KpcGRlo" target="_blank" rel="noopener noreferrer"><span>심층분석</span><span class="pl-count">7</span></a>
+                    <a class="pl-item" href="https://www.youtube.com/playlist?list=PLJrLx2NwWmAQ" target="_blank" rel="noopener noreferrer"><span>클로드 기초 및 활용</span><span class="pl-count">6</span></a>
+                    <a class="pl-item" href="https://www.youtube.com/playlist?list=PLQAJd0ZswpdE" target="_blank" rel="noopener noreferrer"><span>AI 활용 &amp; 개발 워크플로우</span><span class="pl-count">5</span></a>
+                    <a class="pl-item" href="https://www.youtube.com/playlist?list=PLc0q-VzJxDEI" target="_blank" rel="noopener noreferrer"><span>SVIL 앱 소개</span><span class="pl-count">4</span></a>
+                    <a class="pl-item" href="https://www.youtube.com/playlist?list=PLOG0Nnd-DxGk" target="_blank" rel="noopener noreferrer"><span>저시력 접근성 이야기</span><span class="pl-count">4</span></a>
+                    <a class="pl-item" href="https://www.youtube.com/playlist?list=PLbQFvYl3LyCQ" target="_blank" rel="noopener noreferrer"><span>과학 &amp; SVIL 연구노트</span><span class="pl-count">2</span></a>
+                </div>
+
+                <h3 class="sub-heading" data-i18n="blog_heading">블로그 최신 글</h3>
+                <div class="blog-list">
+                    <a class="blog-item" href="https://ghost-production-0ec2.up.railway.app/jeosiryeogeul-wihan-noraebang-peurompeuteo-singpromfterreul-sogaehabnida/" target="_blank" rel="noopener noreferrer">저시력을 위한 노래방 프롬프터, SingPromfter를 소개합니다</a>
+                    <a class="blog-item" href="https://ghost-production-0ec2.up.railway.app/dulman-sseuneun-keopeul-jeonyong-aebeul-mandeuleossseubnida-tether-sogae/" target="_blank" rel="noopener noreferrer">둘만 쓰는 커플 전용 앱을 만들었습니다 — Tether 소개</a>
+                    <a class="blog-item" href="https://ghost-production-0ec2.up.railway.app/keulrodeu-gico-mic-hwalyong-38hoe-anjeonhage-orae-sseugi-38hoereul-macimyeo/" target="_blank" rel="noopener noreferrer">클로드 기초 및 활용 38회: 안전하게 오래 쓰기 — 38회를 마치며</a>
+                </div>
+                <a class="chip" href="https://ghost-production-0ec2.up.railway.app/" target="_blank" rel="noopener noreferrer" data-i18n="blog_more">블로그 전체 보기</a>
+            </section>
+        </div>
+
+        <!-- ── Notice ── -->
+        <div class="wrap" id="notice">
+            <section class="block">
+                <p class="section-label">Notice</p>
+                <h2 class="section-title" data-i18n="notice_title">공지사항</h2>
+                <p class="section-desc" data-i18n="notice_desc">연구소 공지와 소식입니다.</p>
+                <ul class="notice-list" id="notice-list"></ul>
+                <p class="notice-note" id="notice-note" data-i18n="notice_fallback">
+                    공지 게시판을 준비 중입니다. 새 소식은 블로그에서 확인해 주세요.
+                </p>
+            </section>
+        </div>
+
+        <!-- ── Contact + Support ── -->
+        <div class="wrap" id="contact">
+            <section class="block">
+                <p class="section-label">Contact</p>
+                <h2 class="section-title" data-i18n="contact_title">문의하기</h2>
+                <p class="section-desc" data-i18n="contact_desc">궁금한 점이나 제안을 남겨 주세요. 로그인 없이 누구나 보낼 수 있습니다.</p>
+                <div class="contact-grid">
+                    <form class="form-card" id="inquiry-form" novalidate>
+                        <label for="f-name" data-i18n="f_name">이름 (선택)</label>
+                        <input id="f-name" name="name" type="text" autocomplete="name">
+                        <label for="f-email" data-i18n="f_email">이메일 (선택 — 답장이 필요하면 적어 주세요)</label>
+                        <input id="f-email" name="email" type="email" autocomplete="email">
+                        <label for="f-msg" data-i18n="f_msg">내용</label>
+                        <textarea id="f-msg" name="body" required></textarea>
+                        <div class="hp-field" aria-hidden="true">
+                            <label for="f-website">Website</label>
+                            <input id="f-website" name="website" type="text" tabindex="-1" autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="f-submit" data-i18n="f_submit">보내기</button>
+                        <p class="form-msg" id="form-msg" role="status"></p>
+                        <p class="collab-line">
+                            <span data-i18n="collab_line">협업 문의</span>:
+                            <a href="mailto:kuroicode@gmail.com">kuroicode@gmail.com</a>
+                        </p>
+                    </form>
+
+                    <div class="support-card-wrap" id="support">
+                        <h3 class="sub-heading" data-i18n="support_title">후원</h3>
+                        <p style="color:var(--text-sub);font-size:0.97rem;margin:0 0 18px;" data-i18n="support_sub">
+                            SVIL의 도구가 도움이 되셨다면 작은 후원으로 응원해 주세요. 전적으로 선택이고, 후원과 무관하게 도구는 계속 무료예요.
+                        </p>
+                        <div class="support-card">
+                            <div class="qr-frame">
+                                <img src="./assets/toss-qr.png" alt="토스 후원 QR — Toss donation QR" width="216" height="216" loading="lazy">
+                            </div>
+                            <div class="qr-meta">
+                                <b data-i18n="support_toss_label">토스로 후원</b>
+                                <span data-i18n="support_toss_hint">토스 앱으로 QR을 스캔하면 바로 후원할 수 있어요.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ── Footer (svil-copyright 정본) ── -->
     <footer>
-        <div class="footer-inner">
-            <div class="footer-logo">SVIL</div>
-            <nav class="footer-nav" aria-label="Footer navigation">
-                <a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="https://inbluelog.blogspot.com/" target="_blank" rel="noopener noreferrer">Blog</a>
-                <a href="https://www.youtube.com/@%EC%8B%A4%EC%9A%A9%EC%BD%94%EB%94%A9" target="_blank" rel="noopener noreferrer">YouTube</a>
-                <a href="mailto:kuroicode@gmail.com">Contact</a>
-                <a href="privacy.html" id="footer-privacy">개인정보보호정책</a>
-            </nav>
-            <p class="footer-copy">&copy; 2026 Singularity Visual Intelligence Lab. All rights reserved.</p>
+        <div class="wrap">
+            <p class="svil-mission" data-i18n="svil_mission">Singularity Visual Intelligence Lab: 저시력 시각장애인의 AI 접근성을 높이기 위한 연구와 개발을 합니다.</p>
+            <div class="foot-rows">
+                <div class="row"><span class="k" data-i18n="foot_contact">협업 문의</span><a href="mailto:kuroicode@gmail.com">kuroicode@gmail.com</a></div>
+                <div class="row"><span class="k" data-i18n="foot_blog">블로그</span><a href="https://ghost-production-0ec2.up.railway.app/" target="_blank" rel="noopener">인블루의 로그 보관소</a></div>
+                <div class="row"><span class="k" data-i18n="foot_home">홈페이지</span><a href="https://kuroicode-beep.github.io/svil-homepage/" target="_blank" rel="noopener">SVIL</a></div>
+                <div class="row"><span class="k" data-i18n="foot_youtube">유튜브</span><a href="https://www.youtube.com/@SVIL-LAB" target="_blank" rel="noopener">@SVIL-LAB</a></div>
+                <div class="row"><span class="k">GitHub</span><a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener">kuroicode-beep</a></div>
+                <div class="row"><span class="k" data-i18n="foot_privacy_k">개인정보</span><a href="privacy.html" data-i18n="foot_privacy">개인정보처리방침</a></div>
+            </div>
+            <p class="copyright">© <span id="svil-year">2026</span> SVIL Singularity Visual Intelligence Lab.</p>
         </div>
     </footer>
 
     <script>
-        /* ── Localisation data ── */
-        const data = {
+        /* ── 연동 설정 (백엔드·Ghost 키 발급 후 채움 — 비어 있으면 정적 폴백으로 동작) ── */
+        const API_BASE = "https://svil-home-api-production.up.railway.app"; // svil-home-api (Railway)
+        const GHOST_URL = "https://ghost-production-0ec2.up.railway.app";
+        const GHOST_CONTENT_KEY = "6596f9c9d9f552e4ebb36c66bb";  // Ghost Content API (read-only 공개 키)
+        const CONTACT_EMAIL = "kuroicode@gmail.com";
+
+        /* ── i18n (5개 언어 — 키 집합 동일, 누락 시 en 폴백) ── */
+        const I18N = {
             ko: {
-                "hero-brand-name": "SVIL",
-                "hero-brand-full": "Singularity Visual Intelligence Lab",
-                "hero-line-1": "접근성은 평등한 기회를 만듭니다.",
-                "hero-line-2": "접근 가능한 도구만 있다면<br>저시력 시각장애인도 무엇이든 만들 수 있습니다.",
-                "hero-line-3": "SVIL은 이런 도구를 연구하고 개발합니다.",
-                "btn-projects": "프로젝트 보기",
-                "btn-github": "GitHub",
-                "btn-lablog": "랩 로그",
-                "nav-about": "소개",
-                "nav-research": "연구",
-                "nav-projects": "프로젝트",
-                "nav-lablog": "랩 로그",
-                "nav-links-section": "링크",
-                "about-title": "SVIL 소개",
-                "about-desc": "SVIL은 저시력 환경 이후의 인지 변화와 작업 방식을 연구하며, AI 도구와 접근성 중심 인터페이스를 개발하는 독립 실험실입니다.",
-                "philosophy-text": "접근성이 먼저입니다.<br>시력이 변해도 사용할 수 있는 도구를 만듭니다.",
-                "about-extra": "완벽함을 목표로 하지 않습니다. 무언가를 남기는 것을 목표로 합니다.",
-                "research-title": "연구 영역",
-                "research-desc": "SVIL의 네 가지 핵심 연구 분야입니다.",
-                "projects-title": "주요 프로젝트",
-                "projects-desc": "SVIL에서 개발 중인 도구와 실험들입니다.",
-                "lablog-title": "랩 로그",
-                "lablog-desc": "SVIL의 개발 노트, 실험 기록, 집필, 콘텐츠입니다.",
-                "lablog-placeholder": "개발 로그, AI 실험, 접근성 연구 기록, 문화 콘텐츠는 준비 중입니다.<br><span style='font-size:0.85rem;'>블로그 및 유튜브 업데이트 예정.</span>",
-                "links-title": "외부 링크",
-                "links-desc": "SVIL의 외부 채널과 연락 창구입니다.",
-                "link-notice": "",
-                "contact-title": "연락처",
-                "contact-desc": "이메일로 연락해 주세요.",
-                "footer-privacy": "개인정보보호정책",
-                research: [
-                    {
-                        icon: "🧠",
-                        title: "뇌가소성 · 인지능력 연구",
-                        desc: "시력 저하 이후 인지 처리 방식의 변화를 연구합니다. 뇌가소성, 인지 전략 변화, AI 활용과 인지 확장의 관련성을 자기 관찰 기반으로 탐구합니다."
-                    },
-                    {
-                        icon: "📚",
-                        title: "저시력자 AI 교육 커리큘럼",
-                        desc: "저시력자를 위한 AI 활용 교육 커리큘럼을 개발합니다. 생산성 · 접근성 · 로컬 AI 중심 구성으로 강의, 출판, 교육 자료 확장을 목표로 합니다."
-                    },
-                    {
-                        icon: "🎬",
-                        title: "문화 콘텐츠 제작 · 집필",
-                        desc: "저시력 관점에서 영상, 글, 창작 기반 콘텐츠를 제작합니다. 기술과 저시력 경험을 연결하는 문화 작업을 지속합니다."
-                    },
-                    {
-                        icon: "🔍",
-                        title: "접근성 인터페이스 연구",
-                        desc: "고대비 UI, 큰 텍스트, 사용 피로 감소를 중심으로 저시력 친화 인터페이스 원칙을 연구하고 실제 프로젝트에 적용합니다."
-                    }
-                ],
-                projects: [
-                    {
-                        tag: "로컬 AI",
-                        name: "SVIL AI Workstation",
-                        desc: "저시력 친화 로컬 AI 작업 환경 실험 프로젝트. 이미지 · 영상 · 문서 · AI 협업 흐름을 통합한 개인 워크스테이션입니다.",
-                        points: ["로컬 AI 작업 환경", "고대비 인터페이스", "저시력 친화 UI", "생성형 AI 통합"]
-                    },
-                    {
-                        tag: "텍스트 아카이브",
-                        name: "TXTBrain",
-                        desc: "파일을 폴더에 넣으면 AI가 자동으로 정리해주는 로컬 텍스트 아카이브 · 외부 두뇌 도구입니다.",
-                        points: ["txt / md / docx / pdf", "로컬 LLM 태그·요약", "검색 · 리스트 · 상세조회", "저시력 친화 UI"],
-                        link: "https://github.com/kuroicode-beep/TXTBrain"
-                    },
-                    {
-                        tag: "가사 프롬프터",
-                        name: "SingPrompt",
-                        desc: "MR과 함께 가사를 크게 보여주는 저시력 친화 가사 프롬프터입니다.",
-                        points: ["가사 txt 업로드", "mp3 업로드", "전체화면 큰 글씨", "고대비 UI", "스크롤"]
-                    }
-                ]
+                skip_link: "본문 바로가기",
+                nav_about: "소개", nav_research: "연구 분야", nav_projects: "프로젝트",
+                nav_content: "콘텐츠", nav_notice: "공지", nav_contact: "문의",
+                btn_login: "로그인", btn_logout: "로그아웃", role_admin: "관리자", role_member: "일반회원",
+                hero_sub1: "접근성이 확보되면 가능성이 생깁니다.",
+                hero_sub2: "접근 가능한 도구만 있다면 저시력 시각장애인도 무엇이든 만들 수 있습니다.",
+                hero_sub3: "SVIL은 이런 도구를 연구하고 개발합니다.",
+                btn_projects: "프로젝트 보기", btn_blog: "블로그",
+                about_title: "연구소 소개",
+                about_p1: "SVIL(Singularity Visual Intelligence Lab)은 시각장애인을 포함한 접근성 취약 계층을 위한 AI 도구, 교육 커리큘럼, 콘텐츠 시스템을 연구·개발하는 1인 독립 연구소입니다.",
+                phil_title: "철학",
+                phil_1: "AI를 도구가 아닌 협업 동료로 대합니다.",
+                phil_2: "접근성은 추가 기능이 아닌 기본 설계 원칙입니다.",
+                phil_3: "도구가 수익을 만드는 구조를 지향합니다.",
+                phil_4: "비슷한 처지의 사람들에게 불씨가 되는 것이 핵심 동기입니다.",
+                phil_5: "기술보다 구조. 기록 없는 작업은 완료가 아닙니다.",
+                research_title: "연구 분야",
+                research_desc: "SVIL의 다섯 가지 핵심 연구 분야입니다.",
+                r1_title: "저시력자 앱 개발",
+                r1_desc: "고대비·큰 글씨·키보드 우선 원칙으로 저시력 사용자가 실제로 쓸 수 있는 앱을 만듭니다.",
+                r2_title: "워크플로우 개발",
+                r2_desc: "AI 에이전트 협업, 로컬 AI 파이프라인 등 1인 연구소를 굴리는 작업 방식 자체를 설계하고 공유합니다.",
+                r3_title: "저시력자용 콘텐츠 개발",
+                r3_desc: "저시력 관점의 영상·글·창작 콘텐츠를 만들고, 기술과 저시력 경험을 잇는 문화 작업을 지속합니다.",
+                r4_title: "시각장애 관련 연구",
+                r4_desc: "시력 저하 이후의 뇌가소성과 인지 변화, AI 활용과 인지 확장의 관계를 자기 관찰 기반으로 탐구합니다.",
+                r5_title: "교육 커리큘럼",
+                r5_desc: "저시력자를 위한 AI 활용 교육 커리큘럼을 만들어 블로그와 유튜브로 연재합니다.",
+                chip_projects: "프로젝트 보기", lbl_playlist: "재생목록", lbl_channel: "유튜브 채널", lbl_blog: "블로그",
+                proj_title: "프로젝트",
+                proj_desc: "SVIL이 만들고 운영하는 도구들입니다. 랜딩페이지와 GitHub에서 바로 확인할 수 있습니다.",
+                g1_title: "저시력 접근성 도구",
+                g2_title: "저시력 문화·취미 앱",
+                g3_title: "TXT 패밀리 — 개인 지능 생태계",
+                g4_title: "그 외 프로젝트",
+                g5_title: "진행 중인 프로젝트",
+                badge_dl: "다운로드", badge_live: "바로 사용", badge_wip: "개발 중", badge_intro: "소개 페이지", badge_dev: "개발 진행",
+                lbl_landing: "배포페이지", lbl_landing_in: "랜딩페이지", lbl_use: "바로 사용",
+                p_ah_desc: "오디오 입·출력 장치와 볼륨 스냅샷을 단축키 한 번으로 전환하는 Windows 트레이 앱.",
+                p_sat_desc: "Windows Alt+Tab을 대체하는 저시력 친화 창 전환기. 큰 글씨·고대비로 열린 창을 보여줍니다.",
+                p_sp_desc: "MR과 함께 가사를 크게 보여주는 저시력 가사 프롬프터 + 보컬 트레이닝 데스크톱 앱.",
+                p_tarot_desc: "저시력 친화 타로 학습·실전·AI 리딩 웹앱. 설치 없이 브라우저에서 바로 사용합니다.",
+                p_baduk_desc: "저시력 고대비 바둑. 배우기·혼자 두기(AI)·P2P 멀티 대국을 지원합니다.",
+                p_tether_desc: "둘만 쓰는 커플 전용 PWA. 채팅·기록을 하나의 사적인 공간에 담습니다.",
+                txt_desc: "로컬 우선(Local-first) 개인 지능 생태계입니다. 기억을 담는 세 축(일기·문서·AI 대화)을 만들고, 그것을 보고(시각화), 잇는(연결·생성) 구조로 이어집니다. 여덟 개 앱이 로컬 레지스트리로 서로를 발견하고 연동되는 하나의 제품군입니다.",
+                txt_axis: "기억 3축", txt_view: "보기", txt_link: "잇기", txt_util: "수집·통합",
+                wip1_name: "시각장애인 복지·정책·정보 앱",
+                wip1_desc: "시각장애인에게 필요한 복지 제도·정책·생활 정보를 접근성 있게 모아 전하는 앱을 준비하고 있습니다.",
+                wip2_name: "저시력자 교육 콘텐츠 TTS·영상 모바일 앱",
+                wip2_desc: "교육 콘텐츠를 TTS 음성과 영상으로 듣고 볼 수 있는 저시력자용 모바일 앱을 준비하고 있습니다.",
+                content_title: "콘텐츠",
+                content_desc: "유튜브 채널과 블로그에서 SVIL의 기록을 만날 수 있습니다.",
+                yt_stat: "유튜브 · 영상 95개 · 재생목록 8개", yt_visit: "채널 방문",
+                pl_heading: "재생목록", blog_heading: "블로그 최신 글", blog_more: "블로그 전체 보기",
+                notice_title: "공지사항", notice_desc: "연구소 공지와 소식입니다.",
+                notice_fallback: "공지 게시판을 준비 중입니다. 새 소식은 블로그에서 확인해 주세요.",
+                notice_empty: "등록된 공지가 없습니다.",
+                notice_error: "공지를 불러오지 못했습니다. 블로그에서 확인해 주세요.",
+                contact_title: "문의하기",
+                contact_desc: "궁금한 점이나 제안을 남겨 주세요. 로그인 없이 누구나 보낼 수 있습니다.",
+                f_name: "이름 (선택)", f_email: "이메일 (선택 — 답장이 필요하면 적어 주세요)", f_msg: "내용",
+                f_submit: "보내기", f_sending: "보내는 중...",
+                f_ok: "문의가 접수됐어요. 감사합니다!",
+                f_fail: "전송에 실패했어요. 아래 이메일로 보내 주세요.",
+                f_empty: "내용을 입력해 주세요.",
+                f_mailto_hint: "문의 폼 연결을 준비 중이에요. 메일 앱이 열리면 그대로 보내 주세요.",
+                collab_line: "협업 문의",
+                support_title: "후원",
+                support_sub: "SVIL의 도구가 도움이 되셨다면 작은 후원으로 응원해 주세요. 전적으로 선택이고, 후원과 무관하게 도구는 계속 무료예요.",
+                support_toss_label: "토스로 후원",
+                support_toss_hint: "토스 앱으로 QR을 스캔하면 바로 후원할 수 있어요.",
+                svil_mission: "Singularity Visual Intelligence Lab: 저시력 시각장애인의 AI 접근성을 높이기 위한 연구와 개발을 합니다.",
+                foot_contact: "협업 문의", foot_blog: "블로그", foot_home: "홈페이지", foot_youtube: "유튜브",
+                foot_privacy_k: "개인정보", foot_privacy: "개인정보처리방침"
             },
             en: {
-                "hero-brand-name": "SVIL",
-                "hero-brand-full": "Singularity Visual Intelligence Lab",
-                "hero-line-1": "Accessibility creates equal opportunity.",
-                "hero-line-2": "With accessible tools,<br>people with low vision or blindness can build anything.",
-                "hero-line-3": "SVIL researches and develops such tools.",
-                "btn-projects": "View Projects",
-                "btn-github": "GitHub",
-                "btn-lablog": "Lab Log",
-                "nav-about": "About",
-                "nav-research": "Research",
-                "nav-projects": "Projects",
-                "nav-lablog": "Lab Log",
-                "nav-links-section": "Links",
-                "about-title": "About SVIL",
-                "about-desc": "SVIL is an independent lab exploring AI tools, accessibility, and cognition after vision loss.",
-                "philosophy-text": "Accessibility first.<br>We build tools that remain usable when vision changes.",
-                "about-extra": "We do not aim for perfection. We aim to leave something behind.",
-                "research-title": "Research Areas",
-                "research-desc": "Four core research domains at SVIL.",
-                "projects-title": "Major Projects",
-                "projects-desc": "Tools and experiments built at SVIL.",
-                "lablog-title": "Lab Log",
-                "lablog-desc": "Development notes, experiments, writing, and content from SVIL.",
-                "lablog-placeholder": "Development logs, AI experiments, accessibility research, and cultural content — coming soon.<br><span style='font-size:0.85rem;'>Blog and YouTube updates coming soon.</span>",
-                "links-title": "External Links",
-                "links-desc": "Channels and contact points for SVIL.",
-                "link-notice": "",
-                "contact-title": "Contact",
-                "contact-desc": "Reach out via email.",
-                "footer-privacy": "Privacy Policy",
-                research: [
-                    {
-                        icon: "🧠",
-                        title: "Neuroplasticity & Cognitive Adaptation",
-                        desc: "Researching changes in cognitive processing after vision loss. Exploring neuroplasticity, cognitive strategy shifts, and the relationship between AI use and cognitive extension through self-observation."
-                    },
-                    {
-                        icon: "📚",
-                        title: "AI Education for Low Vision Users",
-                        desc: "Developing AI education curricula for low vision users. Focused on productivity, accessibility, and local AI — with potential expansion into lectures, publications, and educational materials."
-                    },
-                    {
-                        icon: "🎬",
-                        title: "Cultural Content & Writing",
-                        desc: "Creating video, written, and creative content from a low vision perspective. Ongoing cultural work connecting technology with the lived experience of vision loss."
-                    },
-                    {
-                        icon: "🔍",
-                        title: "Accessibility-First Interface Research",
-                        desc: "Researching low vision-friendly interface principles: high contrast, large text, reduced visual fatigue. Applied directly to SVIL's own tools and projects."
-                    }
-                ],
-                projects: [
-                    {
-                        tag: "Local AI",
-                        name: "SVIL AI Workstation",
-                        desc: "A local AI workstation designed for accessible creative workflows. Integrates image, video, document, and AI collaboration into a single low vision-friendly environment.",
-                        points: ["Local AI environment", "High contrast UI", "Low vision-first design", "Generative AI integration"]
-                    },
-                    {
-                        tag: "Text Archive",
-                        name: "TXTBrain",
-                        desc: "An AI-powered text archive for organizing thoughts and documents. Drop files in a folder — the AI handles tagging, summarizing, and retrieval.",
-                        points: ["txt / md / docx / pdf", "Local LLM tagging", "Search · List · Detail", "Low vision UI"],
-                        link: "https://github.com/kuroicode-beep/TXTBrain"
-                    },
-                    {
-                        tag: "Lyric Prompter",
-                        name: "SingPrompt",
-                        desc: "An accessible lyric prompter with backing tracks. Large text, high contrast, and full-screen display designed for low vision singing practice.",
-                        points: ["Lyrics txt upload", "mp3 upload", "Fullscreen large text", "High contrast", "Scrollable"]
-                    }
-                ]
+                skip_link: "Skip to content",
+                nav_about: "About", nav_research: "Research", nav_projects: "Projects",
+                nav_content: "Content", nav_notice: "Notice", nav_contact: "Contact",
+                btn_login: "Sign in", btn_logout: "Sign out", role_admin: "Admin", role_member: "Member",
+                hero_sub1: "When accessibility is in place, possibility follows.",
+                hero_sub2: "With accessible tools, people with low vision can build anything.",
+                hero_sub3: "SVIL researches and builds such tools.",
+                btn_projects: "View Projects", btn_blog: "Blog",
+                about_title: "About the Lab",
+                about_p1: "SVIL (Singularity Visual Intelligence Lab) is a one-person independent lab researching and building AI tools, education curricula, and content systems for people with visual impairments and other accessibility needs.",
+                phil_title: "Philosophy",
+                phil_1: "We treat AI as a collaborator, not just a tool.",
+                phil_2: "Accessibility is a default design principle, not an add-on.",
+                phil_3: "We aim for structures where tools sustain themselves.",
+                phil_4: "Being a spark for people in similar situations is the core motivation.",
+                phil_5: "Structure over technology. Work without records is not done.",
+                research_title: "Research Areas",
+                research_desc: "Five core research areas at SVIL.",
+                r1_title: "Apps for Low Vision",
+                r1_desc: "Building apps low-vision users can actually use — high contrast, large text, keyboard first.",
+                r2_title: "Workflow Development",
+                r2_desc: "Designing and sharing the workflows that run a one-person lab: AI agent collaboration and local AI pipelines.",
+                r3_title: "Content for Low Vision",
+                r3_desc: "Creating video, writing, and creative content from a low-vision perspective, connecting technology with lived experience.",
+                r4_title: "Vision Impairment Research",
+                r4_desc: "Exploring neuroplasticity and cognitive change after vision loss, and how AI extends cognition — through self-observation.",
+                r5_title: "Education Curriculum",
+                r5_desc: "Publishing AI education curricula for low-vision users through the blog and YouTube.",
+                chip_projects: "View projects", lbl_playlist: "Playlist", lbl_channel: "YouTube channel", lbl_blog: "Blog",
+                proj_title: "Projects",
+                proj_desc: "Tools built and operated by SVIL — with landing pages and GitHub links.",
+                g1_title: "Low Vision Accessibility Tools",
+                g2_title: "Low Vision Culture & Hobby Apps",
+                g3_title: "TXT Family — Personal Intelligence Ecosystem",
+                g4_title: "Other Projects",
+                g5_title: "In Progress",
+                badge_dl: "Download", badge_live: "Use now", badge_wip: "In development", badge_intro: "Intro page", badge_dev: "In development",
+                lbl_landing: "Landing page", lbl_landing_in: "landing page", lbl_use: "Use now",
+                p_ah_desc: "A Windows tray app that switches audio devices and volume snapshots with a single hotkey.",
+                p_sat_desc: "A low vision-friendly replacement for Windows Alt+Tab — large text, high contrast window switching.",
+                p_sp_desc: "A low-vision lyric prompter with backing tracks plus vocal training, as a desktop app.",
+                p_tarot_desc: "An accessible tarot learning, practice, and AI reading web app. Runs in the browser, no install.",
+                p_baduk_desc: "High-contrast Baduk (Go) for low vision. Learn, play solo against AI, or P2P multiplayer.",
+                p_tether_desc: "A private PWA for two. Chat and memories in one personal space.",
+                txt_desc: "A local-first personal intelligence ecosystem. Three memory axes (diary, documents, AI conversations) flow into seeing (visualization) and connecting (creation). Eight apps discover each other via a local registry as one product family.",
+                txt_axis: "3 memory axes", txt_view: "See", txt_link: "Connect", txt_util: "Capture & tray",
+                wip1_name: "Welfare, Policy & Info App for the Visually Impaired",
+                wip1_desc: "An accessible app gathering welfare programs, policies, and daily-life information for visually impaired users.",
+                wip2_name: "TTS & Video Mobile App for Low Vision Education",
+                wip2_desc: "A mobile app for listening to and watching education content via TTS voice and video, built for low vision.",
+                content_title: "Content",
+                content_desc: "Find SVIL's records on YouTube and the blog.",
+                yt_stat: "YouTube · 95 videos · 8 playlists", yt_visit: "Visit channel",
+                pl_heading: "Playlists", blog_heading: "Latest from the Blog", blog_more: "View all posts",
+                notice_title: "Notices", notice_desc: "Announcements and news from the lab.",
+                notice_fallback: "The notice board is being prepared. Please check the blog for news.",
+                notice_empty: "No notices yet.",
+                notice_error: "Could not load notices. Please check the blog.",
+                contact_title: "Contact",
+                contact_desc: "Leave a question or suggestion. Anyone can send one — no sign-in required.",
+                f_name: "Name (optional)", f_email: "Email (optional — add it if you need a reply)", f_msg: "Message",
+                f_submit: "Send", f_sending: "Sending...",
+                f_ok: "Your message has been received. Thank you!",
+                f_fail: "Sending failed. Please email us instead.",
+                f_empty: "Please enter a message.",
+                f_mailto_hint: "The contact form backend is being prepared. Your mail app will open — just hit send.",
+                collab_line: "Collaboration",
+                support_title: "Support",
+                support_sub: "If SVIL's tools helped you, you can leave a small tip. Entirely optional — the tools stay free either way.",
+                support_toss_label: "Tip via Toss",
+                support_toss_hint: "Scan the QR with the Toss app (Korea) to send a tip.",
+                svil_mission: "Singularity Visual Intelligence Lab: research and development to improve AI accessibility for people with low vision.",
+                foot_contact: "Contact", foot_blog: "Blog", foot_home: "Homepage", foot_youtube: "YouTube",
+                foot_privacy_k: "Privacy", foot_privacy: "Privacy Policy"
+            },
+            ja: {
+                skip_link: "本文へスキップ",
+                nav_about: "紹介", nav_research: "研究分野", nav_projects: "プロジェクト",
+                nav_content: "コンテンツ", nav_notice: "お知らせ", nav_contact: "お問い合わせ",
+                btn_login: "ログイン", btn_logout: "ログアウト", role_admin: "管理者", role_member: "メンバー",
+                hero_sub1: "アクセシビリティが確保されれば、可能性が生まれます。",
+                hero_sub2: "アクセシブルなツールがあれば、ロービジョンの人も何でも作れます。",
+                hero_sub3: "SVILはそのようなツールを研究・開発しています。",
+                btn_projects: "プロジェクトを見る", btn_blog: "ブログ",
+                about_title: "研究所紹介",
+                about_p1: "SVIL（Singularity Visual Intelligence Lab）は、視覚障害者を含むアクセシビリティ弱者のためのAIツール・教育カリキュラム・コンテンツシステムを研究・開発する個人研究所です。",
+                phil_title: "理念",
+                phil_1: "AIを道具ではなく協働の仲間として扱います。",
+                phil_2: "アクセシビリティは追加機能ではなく基本の設計原則です。",
+                phil_3: "ツールが収益を生む構造を目指します。",
+                phil_4: "同じ境遇の人々の火種になることが核心の動機です。",
+                phil_5: "技術より構造。記録のない作業は完了ではありません。",
+                research_title: "研究分野",
+                research_desc: "SVILの5つの中核研究分野です。",
+                r1_title: "ロービジョン向けアプリ開発",
+                r1_desc: "高コントラスト・大きな文字・キーボード優先の原則で、実際に使えるアプリを作ります。",
+                r2_title: "ワークフロー開発",
+                r2_desc: "AIエージェント協業やローカルAIパイプラインなど、個人研究所を回す作業方式そのものを設計・共有します。",
+                r3_title: "ロービジョン向けコンテンツ制作",
+                r3_desc: "ロービジョンの視点から映像・文章・創作コンテンツを作り、技術と経験をつなぐ文化活動を続けます。",
+                r4_title: "視覚障害関連研究",
+                r4_desc: "視力低下後の脳可塑性と認知の変化、AI活用と認知拡張の関係を自己観察に基づいて探究します。",
+                r5_title: "教育カリキュラム",
+                r5_desc: "ロービジョンの方のためのAI活用教育カリキュラムを、ブログとYouTubeで連載しています。",
+                chip_projects: "プロジェクトを見る", lbl_playlist: "再生リスト", lbl_channel: "YouTubeチャンネル", lbl_blog: "ブログ",
+                proj_title: "プロジェクト",
+                proj_desc: "SVILが作り運営しているツールです。ランディングページとGitHubで確認できます。",
+                g1_title: "ロービジョン アクセシビリティツール",
+                g2_title: "ロービジョン 文化・趣味アプリ",
+                g3_title: "TXTファミリー — 個人知能エコシステム",
+                g4_title: "その他のプロジェクト",
+                g5_title: "進行中のプロジェクト",
+                badge_dl: "ダウンロード", badge_live: "今すぐ使う", badge_wip: "開発中", badge_intro: "紹介ページ", badge_dev: "開発中",
+                lbl_landing: "配布ページ", lbl_landing_in: "ランディング", lbl_use: "今すぐ使う",
+                p_ah_desc: "オーディオ入出力デバイスと音量スナップショットをホットキー一発で切り替えるWindowsトレイアプリ。",
+                p_sat_desc: "Windows Alt+Tabを置き換えるロービジョン向けウィンドウ切替。大きな文字・高コントラスト表示。",
+                p_sp_desc: "伴奏と一緒に歌詞を大きく表示するロービジョン向け歌詞プロンプター＋ボーカルトレーニングアプリ。",
+                p_tarot_desc: "ロービジョン向けタロット学習・実践・AIリーディングWebアプリ。インストール不要。",
+                p_baduk_desc: "高コントラストの囲碁。学ぶ・AIと打つ・P2P対局に対応します。",
+                p_tether_desc: "二人だけのカップル専用PWA。チャットと記録をひとつの私的空間に。",
+                txt_desc: "ローカルファーストの個人知能エコシステム。記憶を担う3軸（日記・文書・AI対話）を作り、見る（可視化）・つなぐ（連結・生成）構造へ続きます。8つのアプリがローカルレジストリで互いを発見し連携する一つの製品群です。",
+                txt_axis: "記憶の3軸", txt_view: "見る", txt_link: "つなぐ", txt_util: "収集・統合",
+                wip1_name: "視覚障害者向け福祉・政策・情報アプリ",
+                wip1_desc: "視覚障害者に必要な福祉制度・政策・生活情報をアクセシブルにまとめて届けるアプリを準備中です。",
+                wip2_name: "ロービジョン教育コンテンツ TTS・動画モバイルアプリ",
+                wip2_desc: "教育コンテンツをTTS音声と動画で視聴できるロービジョン向けモバイルアプリを準備中です。",
+                content_title: "コンテンツ",
+                content_desc: "YouTubeチャンネルとブログでSVILの記録に出会えます。",
+                yt_stat: "YouTube · 動画95本 · 再生リスト8つ", yt_visit: "チャンネルへ",
+                pl_heading: "再生リスト", blog_heading: "ブログ最新記事", blog_more: "ブログをすべて見る",
+                notice_title: "お知らせ", notice_desc: "研究所からのお知らせです。",
+                notice_fallback: "お知らせ掲示板は準備中です。最新情報はブログでご確認ください。",
+                notice_empty: "お知らせはまだありません。",
+                notice_error: "お知らせを読み込めませんでした。ブログでご確認ください。",
+                contact_title: "お問い合わせ",
+                contact_desc: "質問や提案をお寄せください。ログインなしでどなたでも送れます。",
+                f_name: "お名前（任意）", f_email: "メール（任意 — 返信が必要な場合はご記入ください）", f_msg: "内容",
+                f_submit: "送信", f_sending: "送信中...",
+                f_ok: "お問い合わせを受け付けました。ありがとうございます！",
+                f_fail: "送信に失敗しました。下記メールへお送りください。",
+                f_empty: "内容を入力してください。",
+                f_mailto_hint: "フォーム連携は準備中です。メールアプリが開いたらそのまま送信してください。",
+                collab_line: "コラボのご相談",
+                support_title: "支援",
+                support_sub: "SVILのツールが役に立ったら、少額のチップで応援できます。もちろん任意で、支援に関係なくツールは無料のままです。",
+                support_toss_label: "Toss で支援",
+                support_toss_hint: "Toss アプリ（韓国）で QR をスキャンして支援できます。",
+                svil_mission: "Singularity Visual Intelligence Lab: ロービジョンの方のAIアクセシビリティを高めるための研究と開発をしています。",
+                foot_contact: "お問い合わせ", foot_blog: "ブログ", foot_home: "ホームページ", foot_youtube: "YouTube",
+                foot_privacy_k: "プライバシー", foot_privacy: "プライバシーポリシー"
+            },
+            zh: {
+                skip_link: "跳到正文",
+                nav_about: "简介", nav_research: "研究领域", nav_projects: "项目",
+                nav_content: "内容", nav_notice: "公告", nav_contact: "联系",
+                btn_login: "登录", btn_logout: "退出", role_admin: "管理员", role_member: "会员",
+                hero_sub1: "无障碍到位，可能性随之而来。",
+                hero_sub2: "只要有无障碍的工具，低视力人群也能创造任何东西。",
+                hero_sub3: "SVIL 研究并开发这样的工具。",
+                btn_projects: "查看项目", btn_blog: "博客",
+                about_title: "研究所简介",
+                about_p1: "SVIL（Singularity Visual Intelligence Lab）是一家个人独立研究所，为包括视障人士在内的无障碍弱势群体研究并开发 AI 工具、教育课程与内容系统。",
+                phil_title: "理念",
+                phil_1: "把 AI 当作协作伙伴，而不仅仅是工具。",
+                phil_2: "无障碍是默认设计原则，而非附加功能。",
+                phil_3: "追求让工具自己产生收益的结构。",
+                phil_4: "成为处境相似者的火种，是核心动力。",
+                phil_5: "结构重于技术。没有记录的工作不算完成。",
+                research_title: "研究领域",
+                research_desc: "SVIL 的五个核心研究领域。",
+                r1_title: "低视力应用开发",
+                r1_desc: "以高对比、大字号、键盘优先为原则，打造低视力用户真正能用的应用。",
+                r2_title: "工作流开发",
+                r2_desc: "设计并分享支撑个人研究所运转的工作方式：AI 智能体协作与本地 AI 流水线。",
+                r3_title: "低视力内容创作",
+                r3_desc: "从低视力视角创作视频、文字与创意内容，持续连接技术与低视力经验的文化工作。",
+                r4_title: "视觉障碍相关研究",
+                r4_desc: "基于自我观察，探究视力下降后的脑可塑性与认知变化，以及 AI 使用与认知扩展的关系。",
+                r5_title: "教育课程",
+                r5_desc: "为低视力人群制作 AI 应用教育课程，在博客和 YouTube 连载。",
+                chip_projects: "查看项目", lbl_playlist: "播放列表", lbl_channel: "YouTube 频道", lbl_blog: "博客",
+                proj_title: "项目",
+                proj_desc: "SVIL 打造并运营的工具，可通过落地页和 GitHub 直接查看。",
+                g1_title: "低视力无障碍工具",
+                g2_title: "低视力文化·爱好应用",
+                g3_title: "TXT 家族 — 个人智能生态",
+                g4_title: "其他项目",
+                g5_title: "进行中的项目",
+                badge_dl: "下载", badge_live: "立即使用", badge_wip: "开发中", badge_intro: "介绍页", badge_dev: "开发中",
+                lbl_landing: "发布页", lbl_landing_in: "落地页", lbl_use: "立即使用",
+                p_ah_desc: "一键切换音频输入输出设备与音量快照的 Windows 托盘应用。",
+                p_sat_desc: "替代 Windows Alt+Tab 的低视力友好窗口切换器，大字号高对比显示。",
+                p_sp_desc: "配合伴奏大字显示歌词的低视力歌词提词器 + 声乐训练桌面应用。",
+                p_tarot_desc: "低视力友好的塔罗学习、实战与 AI 解读网页应用，无需安装。",
+                p_baduk_desc: "高对比围棋。支持学习、与 AI 对弈和 P2P 联机对局。",
+                p_tether_desc: "只属于两个人的情侣专用 PWA。把聊天与记录放进一个私密空间。",
+                txt_desc: "本地优先的个人智能生态。先建立承载记忆的三轴（日记·文档·AI 对话），再进入查看（可视化）与连接（生成）的结构。八个应用通过本地注册表互相发现并联动，构成一个产品家族。",
+                txt_axis: "记忆三轴", txt_view: "查看", txt_link: "连接", txt_util: "采集·整合",
+                wip1_name: "视障人士福利·政策·信息应用",
+                wip1_desc: "正在筹备一款以无障碍方式汇集视障人士所需福利制度、政策与生活信息的应用。",
+                wip2_name: "低视力教育内容 TTS·视频移动应用",
+                wip2_desc: "正在筹备一款通过 TTS 语音与视频收听收看教育内容的低视力移动应用。",
+                content_title: "内容",
+                content_desc: "在 YouTube 频道和博客上可以看到 SVIL 的记录。",
+                yt_stat: "YouTube · 95 个视频 · 8 个播放列表", yt_visit: "访问频道",
+                pl_heading: "播放列表", blog_heading: "博客最新文章", blog_more: "查看全部文章",
+                notice_title: "公告", notice_desc: "研究所的公告与消息。",
+                notice_fallback: "公告板正在筹备中，最新消息请查看博客。",
+                notice_empty: "暂无公告。",
+                notice_error: "公告加载失败，请前往博客查看。",
+                contact_title: "联系我们",
+                contact_desc: "欢迎留下问题或建议，无需登录即可发送。",
+                f_name: "姓名（选填）", f_email: "邮箱（选填 — 需要回复请填写）", f_msg: "内容",
+                f_submit: "发送", f_sending: "发送中...",
+                f_ok: "已收到您的留言，谢谢！",
+                f_fail: "发送失败，请改用下方邮箱联系。",
+                f_empty: "请输入内容。",
+                f_mailto_hint: "表单后端正在筹备中。邮件应用打开后直接发送即可。",
+                collab_line: "合作咨询",
+                support_title: "赞助",
+                support_sub: "如果 SVIL 的工具帮到了你，可以留个小费支持一下。完全自愿，无论是否赞助，工具都会一直免费。",
+                support_toss_label: "用 Toss 赞助",
+                support_toss_hint: "用 Toss 应用（韩国）扫描二维码即可赞助。",
+                svil_mission: "Singularity Visual Intelligence Lab：致力于提升低视力人群 AI 无障碍体验的研究与开发。",
+                foot_contact: "合作咨询", foot_blog: "博客", foot_home: "主页", foot_youtube: "YouTube",
+                foot_privacy_k: "隐私", foot_privacy: "隐私政策"
+            },
+            vi: {
+                skip_link: "Bỏ qua đến nội dung",
+                nav_about: "Giới thiệu", nav_research: "Lĩnh vực", nav_projects: "Dự án",
+                nav_content: "Nội dung", nav_notice: "Thông báo", nav_contact: "Liên hệ",
+                btn_login: "Đăng nhập", btn_logout: "Đăng xuất", role_admin: "Quản trị", role_member: "Thành viên",
+                hero_sub1: "Khi khả năng tiếp cận được đảm bảo, khả năng sẽ mở ra.",
+                hero_sub2: "Với công cụ dễ tiếp cận, người thị lực kém cũng có thể tạo ra bất cứ điều gì.",
+                hero_sub3: "SVIL nghiên cứu và phát triển những công cụ như vậy.",
+                btn_projects: "Xem dự án", btn_blog: "Blog",
+                about_title: "Giới thiệu phòng nghiên cứu",
+                about_p1: "SVIL (Singularity Visual Intelligence Lab) là phòng nghiên cứu độc lập một người, nghiên cứu và phát triển công cụ AI, chương trình giáo dục và hệ thống nội dung cho người khiếm thị và các nhóm yếu thế về khả năng tiếp cận.",
+                phil_title: "Triết lý",
+                phil_1: "Đối xử với AI như một cộng sự, không chỉ là công cụ.",
+                phil_2: "Khả năng tiếp cận là nguyên tắc thiết kế mặc định, không phải tính năng bổ sung.",
+                phil_3: "Hướng tới cấu trúc để công cụ tự tạo ra giá trị.",
+                phil_4: "Trở thành ngọn lửa nhỏ cho những người cùng cảnh ngộ là động lực cốt lõi.",
+                phil_5: "Cấu trúc hơn công nghệ. Công việc không có ghi chép thì chưa hoàn thành.",
+                research_title: "Lĩnh vực nghiên cứu",
+                research_desc: "Năm lĩnh vực nghiên cứu cốt lõi của SVIL.",
+                r1_title: "Phát triển ứng dụng cho người thị lực kém",
+                r1_desc: "Tạo ứng dụng người thị lực kém thực sự dùng được — tương phản cao, chữ lớn, ưu tiên bàn phím.",
+                r2_title: "Phát triển quy trình làm việc",
+                r2_desc: "Thiết kế và chia sẻ chính cách làm việc vận hành một phòng nghiên cứu một người: cộng tác AI agent, pipeline AI cục bộ.",
+                r3_title: "Sản xuất nội dung cho người thị lực kém",
+                r3_desc: "Tạo video, bài viết và nội dung sáng tạo từ góc nhìn thị lực kém, kết nối công nghệ với trải nghiệm thực tế.",
+                r4_title: "Nghiên cứu về khiếm thị",
+                r4_desc: "Khám phá tính dẻo của não và thay đổi nhận thức sau khi giảm thị lực, cùng mối liên hệ giữa AI và mở rộng nhận thức.",
+                r5_title: "Chương trình giáo dục",
+                r5_desc: "Xây dựng chương trình giáo dục ứng dụng AI cho người thị lực kém, đăng trên blog và YouTube.",
+                chip_projects: "Xem dự án", lbl_playlist: "Danh sách phát", lbl_channel: "Kênh YouTube", lbl_blog: "Blog",
+                proj_title: "Dự án",
+                proj_desc: "Các công cụ do SVIL xây dựng và vận hành — kèm trang giới thiệu và GitHub.",
+                g1_title: "Công cụ hỗ trợ tiếp cận cho người thị lực kém",
+                g2_title: "Ứng dụng văn hóa · sở thích cho người thị lực kém",
+                g3_title: "TXT Family — Hệ sinh thái trí tuệ cá nhân",
+                g4_title: "Dự án khác",
+                g5_title: "Đang tiến hành",
+                badge_dl: "Tải về", badge_live: "Dùng ngay", badge_wip: "Đang phát triển", badge_intro: "Trang giới thiệu", badge_dev: "Đang phát triển",
+                lbl_landing: "Trang phát hành", lbl_landing_in: "trang giới thiệu", lbl_use: "Dùng ngay",
+                p_ah_desc: "Ứng dụng khay hệ thống Windows chuyển thiết bị âm thanh và snapshot âm lượng bằng một phím tắt.",
+                p_sat_desc: "Trình chuyển cửa sổ thay thế Alt+Tab của Windows, thân thiện với thị lực kém — chữ lớn, tương phản cao.",
+                p_sp_desc: "Máy nhắc lời bài hát chữ lớn kèm nhạc nền + luyện thanh, ứng dụng desktop cho người thị lực kém.",
+                p_tarot_desc: "Ứng dụng web học, thực hành và đọc bài Tarot bằng AI, thân thiện thị lực kém. Chạy trên trình duyệt.",
+                p_baduk_desc: "Cờ vây tương phản cao cho người thị lực kém. Học, chơi với AI, hoặc đấu P2P.",
+                p_tether_desc: "PWA riêng tư dành cho hai người. Trò chuyện và kỷ niệm trong một không gian riêng.",
+                txt_desc: "Hệ sinh thái trí tuệ cá nhân local-first. Ba trục ký ức (nhật ký · tài liệu · hội thoại AI) dẫn đến xem (trực quan hóa) và kết nối (tạo sinh). Tám ứng dụng tự phát hiện nhau qua registry cục bộ, tạo thành một dòng sản phẩm.",
+                txt_axis: "3 trục ký ức", txt_view: "Xem", txt_link: "Kết nối", txt_util: "Thu thập · tích hợp",
+                wip1_name: "Ứng dụng phúc lợi · chính sách · thông tin cho người khiếm thị",
+                wip1_desc: "Đang chuẩn bị ứng dụng tập hợp chế độ phúc lợi, chính sách và thông tin đời sống cần thiết cho người khiếm thị.",
+                wip2_name: "Ứng dụng di động TTS · video nội dung giáo dục",
+                wip2_desc: "Đang chuẩn bị ứng dụng di động cho người thị lực kém để nghe và xem nội dung giáo dục qua giọng TTS và video.",
+                content_title: "Nội dung",
+                content_desc: "Gặp gỡ các ghi chép của SVIL trên kênh YouTube và blog.",
+                yt_stat: "YouTube · 95 video · 8 danh sách phát", yt_visit: "Xem kênh",
+                pl_heading: "Danh sách phát", blog_heading: "Bài viết mới trên blog", blog_more: "Xem tất cả bài viết",
+                notice_title: "Thông báo", notice_desc: "Thông báo và tin tức từ phòng nghiên cứu.",
+                notice_fallback: "Bảng thông báo đang được chuẩn bị. Vui lòng xem tin mới trên blog.",
+                notice_empty: "Chưa có thông báo.",
+                notice_error: "Không tải được thông báo. Vui lòng xem trên blog.",
+                contact_title: "Liên hệ",
+                contact_desc: "Hãy để lại câu hỏi hoặc đề xuất. Ai cũng có thể gửi mà không cần đăng nhập.",
+                f_name: "Tên (tùy chọn)", f_email: "Email (tùy chọn — điền nếu cần phản hồi)", f_msg: "Nội dung",
+                f_submit: "Gửi", f_sending: "Đang gửi...",
+                f_ok: "Đã nhận được tin nhắn của bạn. Cảm ơn!",
+                f_fail: "Gửi thất bại. Vui lòng gửi qua email bên dưới.",
+                f_empty: "Vui lòng nhập nội dung.",
+                f_mailto_hint: "Backend biểu mẫu đang được chuẩn bị. Ứng dụng mail sẽ mở — chỉ cần bấm gửi.",
+                collab_line: "Liên hệ hợp tác",
+                support_title: "Ủng hộ",
+                support_sub: "Nếu công cụ của SVIL giúp ích cho bạn, bạn có thể gửi một khoản tip nhỏ. Hoàn toàn tùy ý — công cụ vẫn miễn phí dù bạn có ủng hộ hay không.",
+                support_toss_label: "Ủng hộ qua Toss",
+                support_toss_hint: "Quét mã QR bằng ứng dụng Toss (Hàn Quốc) để gửi ủng hộ.",
+                svil_mission: "Singularity Visual Intelligence Lab: nghiên cứu và phát triển nhằm cải thiện khả năng tiếp cận AI cho người thị lực kém.",
+                foot_contact: "Liên hệ", foot_blog: "Blog", foot_home: "Trang chủ", foot_youtube: "YouTube",
+                foot_privacy_k: "Riêng tư", foot_privacy: "Chính sách bảo mật"
             }
         };
 
-        let curLang = 'ko';
+        let curLang = localStorage.getItem("site-lang") || "ko";
+        if (!I18N[curLang]) curLang = "ko";
 
-        function renderText() {
-            const d = data[curLang];
-            // Simple text fields
-            const textIds = [
-                "hero-brand-name","hero-brand-full","hero-line-1","hero-line-2","hero-line-3",
-                "btn-projects","btn-github","btn-lablog",
-                "nav-about","nav-research","nav-projects","nav-lablog","nav-links-section",
-                "about-title","about-desc","philosophy-text","about-extra",
-                "research-title","research-desc","projects-title","projects-desc",
-                "lablog-title","lablog-desc","lablog-placeholder",
-                "links-title","links-desc","link-notice",
-                "contact-title","contact-desc",
-                "footer-privacy"
-            ];
-            textIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el && d[id] !== undefined) el.innerHTML = d[id];
+        function t(key) {
+            return (I18N[curLang] && I18N[curLang][key] !== undefined)
+                ? I18N[curLang][key]
+                : I18N.en[key];
+        }
+        function applyLang() {
+            document.documentElement.lang = curLang;
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const v = t(el.getAttribute("data-i18n"));
+                if (v !== undefined) el.innerHTML = v;
             });
+            document.getElementById("lang-select").value = curLang;
         }
-
-        function renderResearch() {
-            const grid = document.getElementById('research-grid');
-            grid.innerHTML = data[curLang].research.map(r => `
-                <div class="card">
-                    <div class="card-icon">${r.icon}</div>
-                    <div class="card-title">${r.title}</div>
-                    <div class="card-desc">${r.desc}</div>
-                </div>
-            `).join('');
-        }
-
-        function renderProjects() {
-            const grid = document.getElementById('projects-grid');
-            grid.innerHTML = data[curLang].projects.map(p => `
-                <div class="project-card">
-                    <span class="project-tag">${p.tag}</span>
-                    <div class="project-name">${p.name}</div>
-                    <div class="project-desc">${p.desc}</div>
-                    <ul class="project-points">
-                        ${p.points.map(pt => `<li>${pt}</li>`).join('')}
-                    </ul>
-                    ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener noreferrer" class="project-link">GitHub ↗</a>` : ''}
-                </div>
-            `).join('');
-        }
-
-        function render() {
-            renderText();
-            renderResearch();
-            renderProjects();
-        }
-
-        function toggleLang() {
-            curLang = curLang === 'ko' ? 'en' : 'ko';
-            render();
-        }
-
-        function linkNotReady(event, name) {
-            event.preventDefault();
-            alert(name + ' 링크는 현재 설정 중입니다. URL 확인 후 업데이트됩니다.');
-        }
-
-        render();
-
-        /* ── Smooth scroll for anchor links ── */
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', e => {
-                const target = document.querySelector(a.getAttribute('href'));
-                if (target) {
-                    e.preventDefault();
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
+        document.getElementById("lang-select").addEventListener("change", e => {
+            curLang = e.target.value;
+            localStorage.setItem("site-lang", curLang);
+            applyLang();
+            renderNotices(lastNoticeState);
         });
 
-        /* ── Particle background ── */
-        const canvas = document.getElementById('bg-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const particleCount = 50;
-        const connectionDistance = 150;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        /* ── 가독성(글자 크기) 3단계 ── */
+        const fsBtns = document.querySelectorAll(".fs-btn[data-fs]");
+        function applyFs(px) {
+            document.documentElement.style.fontSize = px + "px";
+            fsBtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.fs === String(px) ? "true" : "false"));
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        fsBtns.forEach(b => b.addEventListener("click", () => {
+            localStorage.setItem("svil-fs", b.dataset.fs);
+            applyFs(Number(b.dataset.fs));
+        }));
+        applyFs(Number(localStorage.getItem("svil-fs")) || 18);
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = '#f5c518';
-                ctx.fill();
+        /* ── 저작권 연도 (렌더 시점) ── */
+        document.getElementById("svil-year").textContent = new Date().getFullYear();
+
+        /* ── 공지사항: Ghost 공지 태그 (키 없으면 폴백 문구 유지) ── */
+        let lastNoticeState = null; // null=미시도, 'ok'|'empty'|'error'
+        let noticeCache = [];
+        function renderNotices(state) {
+            const list = document.getElementById("notice-list");
+            const note = document.getElementById("notice-note");
+            if (state === "ok") {
+                list.innerHTML = noticeCache.map(p => {
+                    const d = p.published_at ? p.published_at.slice(0, 10) : "";
+                    return `<li><a href="${p.url}" target="_blank" rel="noopener noreferrer"><span>${p.title}</span><span class="notice-date">${d}</span></a></li>`;
+                }).join("");
+                note.style.display = "none";
+            } else if (state === "empty") {
+                list.innerHTML = "";
+                note.textContent = t("notice_empty");
+                note.style.display = "";
+            } else if (state === "error") {
+                list.innerHTML = "";
+                note.textContent = t("notice_error");
+                note.style.display = "";
+            } // null → data-i18n 기본 폴백 문구 유지
+        }
+        async function loadNotices() {
+            if (!GHOST_CONTENT_KEY) return; // 키 발급 전 — 폴백 문구 그대로
+            try {
+                const tagRes = await fetch(`${GHOST_URL}/ghost/api/content/tags/?key=${GHOST_CONTENT_KEY}&limit=all&fields=name,slug`);
+                const tags = (await tagRes.json()).tags || [];
+                const tag = tags.find(x => x.name === "공지");
+                if (!tag) { lastNoticeState = "empty"; renderNotices("empty"); return; }
+                const postRes = await fetch(`${GHOST_URL}/ghost/api/content/posts/?key=${GHOST_CONTENT_KEY}&filter=tag:${tag.slug}&limit=5&fields=title,url,published_at`);
+                noticeCache = (await postRes.json()).posts || [];
+                lastNoticeState = noticeCache.length ? "ok" : "empty";
+                renderNotices(lastNoticeState);
+            } catch (e) {
+                lastNoticeState = "error";
+                renderNotices("error");
             }
         }
 
-        function initParticles() {
-            for (let i = 0; i < particleCount; i++) particles.push(new Particle());
-        }
+        /* ── 문의 폼: API_BASE 있으면 백엔드, 없으면 mailto 폴백 ── */
+        const form = document.getElementById("inquiry-form");
+        form.addEventListener("submit", async e => {
+            e.preventDefault();
+            const msgEl = document.getElementById("form-msg");
+            const body = document.getElementById("f-msg").value.trim();
+            const name = document.getElementById("f-name").value.trim();
+            const email = document.getElementById("f-email").value.trim();
+            const honeypot = document.getElementById("f-website").value;
+            msgEl.className = "form-msg";
+            if (!body) { msgEl.textContent = t("f_empty"); msgEl.classList.add("fail"); return; }
+            if (honeypot) return; // 스팸 봇
+            if (!API_BASE) {
+                msgEl.textContent = t("f_mailto_hint");
+                const subject = encodeURIComponent("[SVIL 문의] " + (name || "익명"));
+                const mailBody = encodeURIComponent(body + (email ? "\n\n회신 이메일: " + email : ""));
+                location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${mailBody}`;
+                return;
+            }
+            const btn = document.getElementById("f-submit");
+            btn.textContent = t("f_sending");
+            btn.disabled = true;
+            try {
+                const res = await fetch(`${API_BASE}/api/inquiries`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, body })
+                });
+                if (!res.ok) throw new Error("HTTP " + res.status);
+                msgEl.textContent = t("f_ok");
+                msgEl.classList.add("ok");
+                form.reset();
+            } catch (err) {
+                msgEl.textContent = t("f_fail");
+                msgEl.classList.add("fail");
+            } finally {
+                btn.textContent = t("f_submit");
+                btn.disabled = false;
+            }
+        });
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(245, 197, 24, ${1 - dist / connectionDistance})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
+        /* ── 구글 로그인 (API_BASE 설정 시에만 노출) ── */
+        async function initAuth() {
+            if (!API_BASE) return;
+            const loginBtn = document.getElementById("login-btn");
+            const stateEl = document.getElementById("login-state");
+            loginBtn.href = `${API_BASE}/auth/google`;
+            loginBtn.style.display = "inline-flex";
+            try {
+                const res = await fetch(`${API_BASE}/api/me`, { credentials: "include" });
+                if (!res.ok) return;
+                const me = await res.json();
+                if (me && me.email) {
+                    loginBtn.style.display = "none";
+                    stateEl.style.display = "inline-flex";
+                    document.getElementById("login-name").textContent = me.name || me.email;
+                    document.getElementById("login-role").textContent = t(me.role === "admin" ? "role_admin" : "role_member");
+                }
+            } catch (e) { /* 백엔드 미기동 — 게스트 그대로 */ }
+        }
+        document.getElementById("logout-btn").addEventListener("click", async () => {
+            if (!API_BASE) return;
+            try { await fetch(`${API_BASE}/auth/logout`, { method: "POST", credentials: "include" }); } catch (e) {}
+            location.reload();
+        });
+
+        applyLang();
+        loadNotices();
+        initAuth();
+
+        /* ── 파티클 배경 (accent 토큰 색, reduced-motion 시 정지) ── */
+        (function () {
+            const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+            const canvas = document.getElementById("bg-canvas");
+            const ctx = canvas.getContext("2d");
+            const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#7ec8ff";
+            const rgb = (() => {
+                const n = parseInt(accent.slice(1), 16);
+                return `${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}`;
+            })();
+            let particles = [];
+            const COUNT = 45, DIST = 150;
+            let running = false, rafId = null;
+
+            function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+            window.addEventListener("resize", resize);
+            resize();
+
+            function makeParticle() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1
+                };
+            }
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    p.x += p.vx; p.y += p.vy;
+                    if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${rgb}, 0.55)`;
+                    ctx.fill();
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const q = particles[j];
+                        const dx = p.x - q.x, dy = p.y - q.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < DIST) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(${rgb}, ${(1 - dist / DIST) * 0.35})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(q.x, q.y);
+                            ctx.stroke();
+                        }
                     }
                 }
+                rafId = requestAnimationFrame(draw);
             }
-            requestAnimationFrame(animate);
-        }
-
-        initParticles();
-        animate();
+            function start() {
+                if (running) return;
+                running = true;
+                if (!particles.length) for (let i = 0; i < COUNT; i++) particles.push(makeParticle());
+                draw();
+            }
+            function stop() {
+                running = false;
+                if (rafId) cancelAnimationFrame(rafId);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            function sync() { reduced.matches ? stop() : start(); }
+            reduced.addEventListener ? reduced.addEventListener("change", sync) : reduced.addListener(sync);
+            sync();
+        })();
     </script>
 </body>
 </html>

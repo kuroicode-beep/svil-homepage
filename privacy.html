@@ -1,48 +1,108 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>개인정보처리방침 | SVIL</title>
     <style>
-        :root { --accent: #00d4ff; --bg: #0a0a0a; --text: #e0e0e0; --muted: #aaa; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Pretendard', sans-serif; line-height: 1.7; }
-        main { max-width: 860px; margin: 0 auto; padding: 48px 20px 64px; }
-        h1 { color: var(--accent); margin-top: 0; }
-        h2 { margin-top: 28px; color: var(--accent); font-size: 1.1rem; }
-        p, li { color: var(--muted); }
+        :root {
+            --bg: #0d0d12;
+            --surface: #16161d;
+            --border: #3a3a48;
+            --text: #f5f5f7;
+            --text-sub: #c9c9d4;
+            --accent: #7ec8ff;
+            --accent-strong: #b3ddff;
+            --focus: #ffd479;
+            --font-ui: "LINESeedKR", "LINE Seed Sans KR", "Pretendard", "Malgun Gothic", "맑은 고딕",
+                       system-ui, -apple-system, "Segoe UI", sans-serif;
+            font-size: 18px;
+        }
+        @font-face {
+            font-family: "LINESeedKR";
+            src: url("./assets/fonts/LINESeedKR-Rg.ttf") format("truetype");
+            font-weight: 100 900;
+            font-display: swap;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-ui);
+            line-height: 1.8;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            word-break: keep-all;
+        }
+        a:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+        main { max-width: 860px; margin: 0 auto; padding: 48px 24px 64px; }
+        h1 { color: var(--accent-strong); margin: 0 0 20px; font-size: 1.7rem; line-height: 1.3; }
+        h2 { margin: 32px 0 10px; color: var(--accent); font-size: 1.15rem; }
+        p, li { color: var(--text-sub); }
         a { color: var(--accent); }
-        .top-link { display: inline-block; margin-top: 20px; }
+        .top-link {
+            display: inline-flex;
+            align-items: center;
+            min-height: 50px;
+            margin-top: 24px;
+            padding: 0 20px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            text-decoration: none;
+        }
+        .top-link:hover { border-color: var(--accent); }
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 36px 24px;
+            max-width: 860px;
+            margin: 0 auto;
+            color: var(--text-sub);
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
     <main>
         <h1>개인정보처리방침</h1>
-        <p>SVIL(이하 "회사")은(는) 이용자의 개인정보를 중요하게 여기며, 관련 법령을 준수합니다.</p>
+        <p>SVIL(Singularity Visual Intelligence Lab, 이하 "연구소")은 이용자의 개인정보를 중요하게 여기며, 관련 법령을 준수합니다.</p>
 
         <h2>1. 수집 항목</h2>
         <ul>
-            <li>이메일, 문의 내용 (문의 시)</li>
+            <li>문의하기: 문의 내용, 이름·이메일(이용자가 선택적으로 입력한 경우)</li>
+            <li>회원 로그인(구글 계정): 이메일, 이름 — 로그인은 선택이며, 로그인 없이도 모든 기능을 이용할 수 있습니다</li>
             <li>접속 로그, 브라우저 정보, 방문 일시 (서비스 이용 과정에서 자동 수집)</li>
         </ul>
 
         <h2>2. 이용 목적</h2>
         <ul>
             <li>문의 응대 및 서비스 개선</li>
+            <li>회원 식별 및 관리자 기능 제공</li>
             <li>서비스 품질 분석 및 보안 관리</li>
         </ul>
 
         <h2>3. 보유 및 이용 기간</h2>
-        <p>수집 목적 달성 후 지체 없이 파기하며, 관련 법령에 따라 보관이 필요한 경우 해당 기간 동안 보관합니다.</p>
+        <p>수집 목적 달성 후 지체 없이 파기하며, 관련 법령에 따라 보관이 필요한 경우 해당 기간 동안 보관합니다. 회원 탈퇴 요청 시 회원 정보를 즉시 삭제합니다.</p>
 
         <h2>4. 제3자 제공</h2>
         <p>법령상 근거가 있는 경우를 제외하고 이용자 동의 없이 개인정보를 외부에 제공하지 않습니다.</p>
 
         <h2>5. 문의</h2>
-        <p>개인정보 관련 문의: inblue@yourdomain.com</p>
+        <p>개인정보 관련 문의: <a href="mailto:kuroicode@gmail.com">kuroicode@gmail.com</a></p>
 
-        <p>본 방침은 2026년 3월 5일부터 적용됩니다.</p>
+        <p>본 방침은 2026년 8월 6일부터 적용됩니다.</p>
         <a class="top-link" href="index.html">홈으로 돌아가기</a>
     </main>
+
+    <footer>
+        <p style="margin:0 0 14px;">Singularity Visual Intelligence Lab: 저시력 시각장애인의 AI 접근성을 높이기 위한 연구와 개발을 합니다.</p>
+        <p style="margin:0 0 4px;">협업 문의 · <a href="mailto:kuroicode@gmail.com">kuroicode@gmail.com</a></p>
+        <p style="margin:0 0 4px;">블로그 · <a href="https://ghost-production-0ec2.up.railway.app/" target="_blank" rel="noopener">인블루의 로그 보관소</a></p>
+        <p style="margin:0 0 14px;">홈페이지 · <a href="https://kuroicode-beep.github.io/svil-homepage/">SVIL</a></p>
+        <p style="margin:0;">© <span id="svil-year">2026</span> SVIL Singularity Visual Intelligence Lab.</p>
+    </footer>
+    <script>
+        document.getElementById('svil-year').textContent = new Date().getFullYear();
+    </script>
 </body>
 </html>
