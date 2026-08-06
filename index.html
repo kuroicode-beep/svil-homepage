@@ -1443,10 +1443,8 @@
         loadNotices();
         initAuth();
 
-        /* ── 뉴런 네트워크 배경 (accent 토큰 색)
-           reduced-motion 환경에서는 움직임만 빼고 정적 네트워크 1프레임을 그린다 ── */
+        /* ── 뉴런 네트워크 배경 (accent 토큰 색, 항상 애니메이션 — 소장님 지정 2026-08-06) ── */
         (function () {
-            const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
             const canvas = document.getElementById("bg-canvas");
             const ctx = canvas.getContext("2d");
             const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#7ec8ff";
@@ -1527,19 +1525,10 @@
                 if (!particles.length) seed();
                 loop();
             }
-            function stopAndDrawStatic() {
-                running = false;
-                if (rafId) cancelAnimationFrame(rafId);
-                syncSize();
-                if (!particles.length) seed();
-                drawFrame(false); // 정적 네트워크 유지 — 움직임만 제거
-            }
             window.addEventListener("resize", () => {
-                if (syncSize()) { seed(); if (!running) drawFrame(false); }
+                if (syncSize()) seed();
             });
-            function sync() { reduced.matches ? stopAndDrawStatic() : start(); }
-            reduced.addEventListener ? reduced.addEventListener("change", sync) : reduced.addListener(sync);
-            sync();
+            start();
         })();
     </script>
 </body>
