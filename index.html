@@ -195,20 +195,21 @@
             cursor: pointer;
         }
         .login-btn {
-            background: var(--surface-2);
-            color: var(--text);
-            border: 2px solid var(--border-strong);
-            border-radius: 12px;
+            background: var(--accent-strong);
+            color: #000;
+            border: none;
+            border-radius: 8px;
             min-height: 50px;
-            padding: 0 16px;
+            padding: 0 22px;
             font-size: 0.95rem;
+            font-weight: 700;
             font-family: var(--font-ui);
             cursor: pointer;
             text-decoration: none;
             display: none; /* API_BASE 설정 시 JS가 표시 */
             align-items: center;
         }
-        .login-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .login-btn:hover { background: var(--accent-max); }
         .login-state {
             display: none;
             align-items: center;
@@ -224,55 +225,56 @@
             color: var(--accent);
         }
 
-        /* ── Hero ── */
+        /* ── Hero (Stitch: 좌측 정렬 대형 히어로) ── */
         .hero {
-            padding: 56px 0 80px;
-            text-align: center;
+            min-height: 72vh;
+            padding: 96px 0 110px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-        }
-        .hero-logo img { width: 96px; height: 96px; margin-bottom: 20px; }
-        .hero-brand-name {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            color: var(--text);
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
         }
         .hero-brand-full {
-            margin-top: 4px;
             font-size: 0.95rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
             color: var(--accent);
+            font-family: var(--font-mono);
+            margin: 0 0 18px;
         }
         .hero-slogan {
-            margin: 34px 0 0;
-            font-size: clamp(30px, 4.4vw, 54px);
+            margin: 0;
+            font-size: clamp(34px, 5vw, 60px);
             font-weight: 700;
-            line-height: 1.3;
-            color: var(--accent-strong);
-        }
-        .hero-sub {
-            margin: 22px 0 0;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            color: #edf5ff;
             max-width: 860px;
         }
-        .hero-sub p { margin: 6px 0; }
-        .hero-sub .s1 { font-size: clamp(20px, 2.6vw, 30px); font-weight: 700; color: var(--text); }
-        .hero-sub .s2 { font-size: clamp(17px, 2vw, 24px); color: var(--text); }
-        .hero-sub .s3 { font-size: clamp(16px, 1.8vw, 21px); color: var(--text-sub); }
+        .hero-sub {
+            margin: 26px 0 0;
+            max-width: 720px;
+        }
+        .hero-sub p {
+            margin: 0;
+            font-size: clamp(17px, 1.6vw, 21px);
+            color: var(--text-sub);
+        }
         .hero-btns {
             display: flex;
             gap: 14px;
-            justify-content: center;
+            justify-content: flex-start;
             flex-wrap: wrap;
-            margin-top: 38px;
+            margin-top: 44px;
         }
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-height: 54px;
-            padding: 0 30px;
-            border-radius: 12px;
+            min-height: 52px;
+            padding: 0 32px;
+            border-radius: 8px;
             font-size: 1.05rem;
             font-weight: 700;
             text-decoration: none;
@@ -284,11 +286,11 @@
         .btn-primary { background: var(--accent-strong); color: #000; }
         .btn-primary:hover { background: var(--accent-max); }
         .btn-outline {
-            background: var(--surface-2);
-            border-color: var(--border-strong);
-            color: var(--text);
+            background: transparent;
+            border-color: var(--accent-strong);
+            color: var(--accent-strong);
         }
-        .btn-outline:hover { border-color: var(--accent); color: var(--accent-strong); }
+        .btn-outline:hover { background: var(--surface-2); color: var(--accent-max); border-color: var(--accent-max); }
 
         /* ── Sections ── */
         section.block { padding: 76px 0; border-top: 1px solid var(--border); }
@@ -297,6 +299,7 @@
             letter-spacing: 0.2em;
             text-transform: uppercase;
             color: var(--accent);
+            font-family: var(--font-mono);
             margin: 0 0 10px;
         }
         .section-title {
@@ -536,14 +539,30 @@
         /* ── Footer (svil-copyright 정본) ── */
         footer {
             border-top: 1px solid var(--border);
-            padding: 48px 0;
+            background: #0a0a0f;
+            padding: 52px 0;
             color: var(--text-sub);
             font-size: 0.95rem;
             position: relative;
             z-index: 10;
         }
-        .svil-mission { margin: 0 0 22px; }
-        .foot-rows { display: grid; gap: 8px; margin-bottom: 22px; }
+        .foot-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+        }
+        @media (min-width: 820px) {
+            .foot-grid { grid-template-columns: 5fr 7fr; align-items: start; }
+        }
+        .foot-brand {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-strong);
+            letter-spacing: 0.05em;
+            margin: 0 0 14px;
+        }
+        .svil-mission { margin: 0 0 18px; }
+        .foot-rows { display: grid; gap: 8px; }
         .foot-rows .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
         .foot-rows .k { color: var(--text-sub); min-width: 90px; }
         .foot-rows a {
@@ -559,8 +578,7 @@
         /* ── Responsive ── */
         @media (max-width: 768px) {
             .nav-links { display: none; }
-            .hero { padding: 40px 0 60px; }
-            .hero-logo img { width: 72px; height: 72px; }
+            .hero { min-height: auto; padding: 56px 0 72px; }
         }
         @media (max-width: 480px) {
             .btn { width: 100%; }
@@ -575,7 +593,7 @@
     <!-- ── Navigation ── -->
     <nav class="top" aria-label="주 메뉴">
         <div class="nav-inner">
-            <a href="#main" class="nav-logo">SVIL</a>
+            <a href="#main" class="nav-logo"><img src="./assets/svil-logo.svg" alt="" width="34" height="34" style="margin-right:10px;">SVIL</a>
             <ul class="nav-links">
                 <li><a href="#about" data-i18n="nav_about">소개</a></li>
                 <li><a href="#research" data-i18n="nav_research">연구 분야</a></li>
@@ -611,18 +629,10 @@
         <!-- ── Hero ── -->
         <div class="wrap">
             <section class="hero" aria-labelledby="hero-slogan">
-                <div class="hero-logo">
-                    <img src="./assets/svil-logo.svg" alt="SVIL 로고" width="96" height="96">
-                </div>
-                <h1 style="margin:0;">
-                    <span class="hero-brand-name">SVIL</span><br>
-                    <span class="hero-brand-full">Singularity Visual Intelligence Lab</span>
-                </h1>
-                <p class="hero-slogan" id="hero-slogan">Accessibility creates possibility.</p>
+                <p class="hero-brand-full">Singularity Visual Intelligence Lab</p>
+                <h1 class="hero-slogan" id="hero-slogan">Accessibility creates possibility.</h1>
                 <div class="hero-sub">
-                    <p class="s1" data-i18n="hero_sub1">접근성이 확보되면 가능성이 생깁니다.</p>
-                    <p class="s2" data-i18n="hero_sub2">접근 가능한 도구만 있다면 저시력 시각장애인도 무엇이든 만들 수 있습니다.</p>
-                    <p class="s3" data-i18n="hero_sub3">SVIL은 이런 도구를 연구하고 개발합니다.</p>
+                    <p data-i18n="hero_sub">접근 가능한 도구만 있다면 저시력 시각장애인도 무엇이든 만들 수 있습니다. SVIL은 시각적 제약을 넘어 잠재력을 발현할 수 있는 기술과 환경을 연구합니다.</p>
                 </div>
                 <div class="hero-btns">
                     <a href="#projects" class="btn btn-primary" data-i18n="btn_projects">프로젝트 보기</a>
@@ -932,16 +942,21 @@
     <!-- ── Footer (svil-copyright 정본) ── -->
     <footer>
         <div class="wrap">
-            <p class="svil-mission" data-i18n="svil_mission">Singularity Visual Intelligence Lab: 저시력 시각장애인의 AI 접근성을 높이기 위한 연구와 개발을 합니다.</p>
-            <div class="foot-rows">
-                <div class="row"><span class="k" data-i18n="foot_contact">협업 문의</span><a href="mailto:kuroicode@gmail.com">kuroicode@gmail.com</a></div>
-                <div class="row"><span class="k" data-i18n="foot_blog">블로그</span><a href="https://ghost-production-0ec2.up.railway.app/" target="_blank" rel="noopener">인블루의 로그 보관소</a></div>
-                <div class="row"><span class="k" data-i18n="foot_home">홈페이지</span><a href="https://svil.dev/" target="_blank" rel="noopener">SVIL</a></div>
-                <div class="row"><span class="k" data-i18n="foot_youtube">유튜브</span><a href="https://www.youtube.com/@SVIL-LAB" target="_blank" rel="noopener">@SVIL-LAB</a></div>
-                <div class="row"><span class="k">GitHub</span><a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener">kuroicode-beep</a></div>
-                <div class="row"><span class="k" data-i18n="foot_privacy_k">개인정보</span><a href="privacy.html" data-i18n="foot_privacy">개인정보처리방침</a></div>
+            <div class="foot-grid">
+                <div>
+                    <p class="foot-brand">SVIL</p>
+                    <p class="svil-mission" data-i18n="svil_mission">Singularity Visual Intelligence Lab: 저시력 시각장애인의 AI 접근성을 높이기 위한 연구와 개발을 합니다.</p>
+                    <p class="copyright">© <span id="svil-year">2026</span> SVIL Singularity Visual Intelligence Lab.</p>
+                </div>
+                <div class="foot-rows">
+                    <div class="row"><span class="k" data-i18n="foot_contact">협업 문의</span><a href="mailto:kuroicode@gmail.com">kuroicode@gmail.com</a></div>
+                    <div class="row"><span class="k" data-i18n="foot_blog">블로그</span><a href="https://ghost-production-0ec2.up.railway.app/" target="_blank" rel="noopener">인블루의 로그 보관소</a></div>
+                    <div class="row"><span class="k" data-i18n="foot_home">홈페이지</span><a href="https://svil.dev/" target="_blank" rel="noopener">SVIL</a></div>
+                    <div class="row"><span class="k" data-i18n="foot_youtube">유튜브</span><a href="https://www.youtube.com/@SVIL-LAB" target="_blank" rel="noopener">@SVIL-LAB</a></div>
+                    <div class="row"><span class="k">GitHub</span><a href="https://github.com/kuroicode-beep" target="_blank" rel="noopener">kuroicode-beep</a></div>
+                    <div class="row"><span class="k" data-i18n="foot_privacy_k">개인정보</span><a href="privacy.html" data-i18n="foot_privacy">개인정보처리방침</a></div>
+                </div>
             </div>
-            <p class="copyright">© <span id="svil-year">2026</span> SVIL Singularity Visual Intelligence Lab.</p>
         </div>
     </footer>
 
@@ -959,9 +974,7 @@
                 nav_about: "소개", nav_research: "연구 분야", nav_projects: "프로젝트",
                 nav_content: "콘텐츠", nav_notice: "공지", nav_contact: "문의",
                 btn_login: "로그인", btn_logout: "로그아웃", role_admin: "관리자", role_member: "일반회원",
-                hero_sub1: "접근성이 확보되면 가능성이 생깁니다.",
-                hero_sub2: "접근 가능한 도구만 있다면 저시력 시각장애인도 무엇이든 만들 수 있습니다.",
-                hero_sub3: "SVIL은 이런 도구를 연구하고 개발합니다.",
+                hero_sub: "접근 가능한 도구만 있다면 저시력 시각장애인도 무엇이든 만들 수 있습니다. SVIL은 시각적 제약을 넘어 잠재력을 발현할 수 있는 기술과 환경을 연구합니다.",
                 btn_projects: "프로젝트 보기", btn_blog: "블로그",
                 about_title: "연구소 소개",
                 about_p1: "SVIL(Singularity Visual Intelligence Lab)은 시각장애인을 포함한 접근성 취약 계층을 위한 AI 도구, 교육 커리큘럼, 콘텐츠 시스템을 연구·개발하는 1인 독립 연구소입니다.",
@@ -1026,9 +1039,7 @@
                 nav_about: "About", nav_research: "Research", nav_projects: "Projects",
                 nav_content: "Content", nav_notice: "Notice", nav_contact: "Contact",
                 btn_login: "Sign in", btn_logout: "Sign out", role_admin: "Admin", role_member: "Member",
-                hero_sub1: "When accessibility is in place, possibility follows.",
-                hero_sub2: "With accessible tools, people with low vision can build anything.",
-                hero_sub3: "SVIL researches and builds such tools.",
+                hero_sub: "With accessible tools, people with low vision can build anything. SVIL researches technology and environments that unlock potential beyond visual limits.",
                 btn_projects: "View Projects", btn_blog: "Blog",
                 about_title: "About the Lab",
                 about_p1: "SVIL (Singularity Visual Intelligence Lab) is a one-person independent lab researching and building AI tools, education curricula, and content systems for people with visual impairments and other accessibility needs.",
@@ -1093,9 +1104,7 @@
                 nav_about: "紹介", nav_research: "研究分野", nav_projects: "プロジェクト",
                 nav_content: "コンテンツ", nav_notice: "お知らせ", nav_contact: "お問い合わせ",
                 btn_login: "ログイン", btn_logout: "ログアウト", role_admin: "管理者", role_member: "メンバー",
-                hero_sub1: "アクセシビリティが確保されれば、可能性が生まれます。",
-                hero_sub2: "アクセシブルなツールがあれば、ロービジョンの人も何でも作れます。",
-                hero_sub3: "SVILはそのようなツールを研究・開発しています。",
+                hero_sub: "アクセシブルなツールがあれば、ロービジョンの人も何でも作れます。SVILは視覚的制約を越えて潜在能力を発揮できる技術と環境を研究しています。",
                 btn_projects: "プロジェクトを見る", btn_blog: "ブログ",
                 about_title: "研究所紹介",
                 about_p1: "SVIL（Singularity Visual Intelligence Lab）は、視覚障害者を含むアクセシビリティ弱者のためのAIツール・教育カリキュラム・コンテンツシステムを研究・開発する個人研究所です。",
@@ -1160,9 +1169,7 @@
                 nav_about: "简介", nav_research: "研究领域", nav_projects: "项目",
                 nav_content: "内容", nav_notice: "公告", nav_contact: "联系",
                 btn_login: "登录", btn_logout: "退出", role_admin: "管理员", role_member: "会员",
-                hero_sub1: "无障碍到位，可能性随之而来。",
-                hero_sub2: "只要有无障碍的工具，低视力人群也能创造任何东西。",
-                hero_sub3: "SVIL 研究并开发这样的工具。",
+                hero_sub: "只要有无障碍的工具，低视力人群也能创造任何东西。SVIL 研究能够超越视觉限制、释放潜能的技术与环境。",
                 btn_projects: "查看项目", btn_blog: "博客",
                 about_title: "研究所简介",
                 about_p1: "SVIL（Singularity Visual Intelligence Lab）是一家个人独立研究所，为包括视障人士在内的无障碍弱势群体研究并开发 AI 工具、教育课程与内容系统。",
@@ -1227,9 +1234,7 @@
                 nav_about: "Giới thiệu", nav_research: "Lĩnh vực", nav_projects: "Dự án",
                 nav_content: "Nội dung", nav_notice: "Thông báo", nav_contact: "Liên hệ",
                 btn_login: "Đăng nhập", btn_logout: "Đăng xuất", role_admin: "Quản trị", role_member: "Thành viên",
-                hero_sub1: "Khi khả năng tiếp cận được đảm bảo, khả năng sẽ mở ra.",
-                hero_sub2: "Với công cụ dễ tiếp cận, người thị lực kém cũng có thể tạo ra bất cứ điều gì.",
-                hero_sub3: "SVIL nghiên cứu và phát triển những công cụ như vậy.",
+                hero_sub: "Với công cụ dễ tiếp cận, người thị lực kém cũng có thể tạo ra bất cứ điều gì. SVIL nghiên cứu công nghệ và môi trường giúp phát huy tiềm năng vượt qua giới hạn thị giác.",
                 btn_projects: "Xem dự án", btn_blog: "Blog",
                 about_title: "Giới thiệu phòng nghiên cứu",
                 about_p1: "SVIL (Singularity Visual Intelligence Lab) là phòng nghiên cứu độc lập một người, nghiên cứu và phát triển công cụ AI, chương trình giáo dục và hệ thống nội dung cho người khiếm thị và các nhóm yếu thế về khả năng tiếp cận.",
