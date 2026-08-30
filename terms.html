@@ -85,6 +85,13 @@
             color: var(--text-sub);
             font-size: 0.9rem;
         }
+        /* 터치 타겟 — 실측 16px 였다 (2026-08-30). 푸터 링크는 독립적으로 누르는 대상이라
+           컴팩트 기준 34px 를 채운다. 본문 문장 속 인라인 링크는 줄 흐름이 깨지므로 건드리지 않는다. */
+        footer a {
+            display: inline-block;
+            min-height: 34px;
+            line-height: 34px;
+        }
     </style>
 </head>
 <body>
