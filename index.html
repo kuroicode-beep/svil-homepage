@@ -986,6 +986,7 @@
         const GHOST_URL = "https://blog.svil.dev";
         const GHOST_CONTENT_KEY = "6596f9c9d9f552e4ebb36c66bb";  // Ghost Content API (read-only 공개 키)
         const CONTACT_EMAIL = "kuroicode@gmail.com";
+        const NOTICE_TAG_SLUG = "gongji";  // Ghost 「공지」 태그의 slug
 
         /* ── i18n (5개 언어 — 키 집합 동일, 누락 시 en 폴백) ── */
         const I18N = {
@@ -1384,11 +1385,9 @@
         async function loadNotices() {
             if (!GHOST_CONTENT_KEY) return; // 키 발급 전 — 폴백 문구 그대로
             try {
-                const tagRes = await fetch(`${GHOST_URL}/ghost/api/content/tags/?key=${GHOST_CONTENT_KEY}&limit=all&fields=name,slug`);
-                const tags = (await tagRes.json()).tags || [];
-                const tag = tags.find(x => x.name === "공지");
-                if (!tag) { lastNoticeState = "empty"; renderNotices("empty"); return; }
-                const postRes = await fetch(`${GHOST_URL}/ghost/api/content/posts/?key=${GHOST_CONTENT_KEY}&filter=tag:${tag.slug}&limit=5&fields=title,url,published_at`);
+                // 태그 slug로 바로 조회한다. 태그 목록을 받아 이름으로 찾던 옛 방식은
+                // Ghost가 limit=all에도 100개만 돌려주는 탓에(태그 880개) 공지를 놓쳤다.
+                const postRes = await fetch(`${GHOST_URL}/ghost/api/content/posts/?key=${GHOST_CONTENT_KEY}&filter=tag:${NOTICE_TAG_SLUG}&limit=5&fields=title,url,published_at`);
                 noticeCache = (await postRes.json()).posts || [];
                 lastNoticeState = noticeCache.length ? "ok" : "empty";
                 renderNotices(lastNoticeState);
